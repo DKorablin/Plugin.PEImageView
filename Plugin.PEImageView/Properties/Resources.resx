@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Section_DIRECTORY_EXCEPTION" xml:space="preserve">
+    <value>Exception Table</value>
+  </data>
+  <data name="TypeLib_Err_BadMachineSwitch" xml:space="preserve">
+    <value>A single valid machine type compatible with the input type library must be specified.</value>
+  </data>
+  <data name="Section_DIRECTORY_DEBUG" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="iconOpenFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>iconOpenFile.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TypeLib_Msg_AssemblyLoadedArg1" xml:space="preserve">
+    <value>Assembly '{0}' loaded.</value>
+  </data>
+  <data name="Section_DIRECTORY_RESOURCE" xml:space="preserve">
+    <value>Resource Table</value>
+  </data>
+  <data name="Section_IMAGE_OPTIONAL_HEADER" xml:space="preserve">
+    <value>Optional header</value>
+  </data>
+  <data name="TypeLib_Wrn_CircularReferenceArg1" xml:space="preserve">
+    <value>The referenced type library, '{0}', contains a circular reference, and may not be fully imported.</value>
+  </data>
+  <data name="Section_DIRECTORY_IAT" xml:space="preserve">
+    <value>IAT</value>
+  </data>
+  <data name="Section_IMAGE_SECTION_HEADER" xml:space="preserve">
+    <value>Sections header</value>
+  </data>
+  <data name="TypeLib_Err_RegisteredPIANotPIAArg2" xml:space="preserve">
+    <value>Assembly '{0}' which is registered as the primary interop assembly for type library '{1}' is not actually a primary interop assembly.</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_VTABLE" xml:space="preserve">
+    <value>VTable fixup</value>
+  </data>
+  <data name="ToolBar_Empty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ToolBar.Empty.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Section_DIRECTORY_ARCHITECTURE" xml:space="preserve">
+    <value>Architecture</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_RESOURCE" xml:space="preserve">
+    <value>Resource Table</value>
+  </data>
+  <data name="Section_DIRECTORY_SECURITY" xml:space="preserve">
+    <value>Certificate Table</value>
+  </data>
+  <data name="TypeLib_Err_ReferencedPIANotPIAArg1" xml:space="preserve">
+    <value>Referenced assembly '{0}' is not a primary interop assembly.</value>
+  </data>
+  <data name="Section_IMAGE_COFF_HEADER" xml:space="preserve">
+    <value>COFF header</value>
+  </data>
+  <data name="iconOpenGAC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>iconOpenGAC.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_METADATA" xml:space="preserve">
+    <value>CLR Runtime Header</value>
+  </data>
+  <data name="iconOpen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\Images.Shared\iconOpen.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Section_DIRECTORY_EXPORT" xml:space="preserve">
+    <value>Export Table</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_MNH" xml:space="preserve">
+    <value>Managed Native Header</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_SN" xml:space="preserve">
+    <value>Strong Name Singnature</value>
+  </data>
+  <data name="Section_DIRECTORY_BOUND_IMPORT" xml:space="preserve">
+    <value>Bound Import</value>
+  </data>
+  <data name="Section_DIRECTORY_COM_DECRIPTOR" xml:space="preserve">
+    <value>CLR Runtime Header</value>
+  </data>
+  <data name="Section_DIRECTORY_RELOCATION" xml:space="preserve">
+    <value>Base Relocation Table</value>
+  </data>
+  <data name="TypeLib_Msg_RefFoundInAsmRefListArg2" xml:space="preserve">
+    <value>A reference to type library '{0}' has been resolved to user specified assembly '{1}'.</value>
+  </data>
+  <data name="Section_IMAGE_DOS_HEADER" xml:space="preserve">
+    <value>DOS header</value>
+  </data>
+  <data name="TypeLib_Msg_AssemblyResolvedArg1" xml:space="preserve">
+    <value>Assembly '{0}' resolved.</value>
+  </data>
+  <data name="TypeLib_Msg_ResolvingRefArg1" xml:space="preserve">
+    <value>Resolving reference to type library '{0}'.</value>
+  </data>
+  <data name="TypeLib_Msg_AsmRefLookupMatchProblemArg8" xml:space="preserve">
+    <value>A reference lookup for a type library failed because the assembly '{0}' with TypeLib GUID '{1}' and version '{2}.{3}' does not match the type library '{4}' with TypeLib GUID '{5}' and version '{6}.{7}'.</value>
+  </data>
+  <data name="Section_IMAGE_FILE_HEADER" xml:space="preserve">
+    <value>File header</value>
+  </data>
+  <data name="Section_DIRECTORY_LOAD_CONFIG" xml:space="preserve">
+    <value>Load Config Table</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_EAT" xml:space="preserve">
+    <value>Export Address Table</value>
+  </data>
+  <data name="NullString" xml:space="preserve">
+    <value>&lt;NULL&gt;</value>
+  </data>
+  <data name="Section_DIRECTORY_IMPORT" xml:space="preserve">
+    <value>Import Table</value>
+  </data>
+  <data name="iconOpenProcess" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>iconOpenProcess.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Section_IMAGE_NT_HEADERS" xml:space="preserve">
+    <value>NT header</value>
+  </data>
+  <data name="Section_DIRECTORY_TLS" xml:space="preserve">
+    <value>TLS Table</value>
+  </data>
+  <data name="Section_DIRECTORY_COR_CMT" xml:space="preserve">
+    <value>Code Manager Table</value>
+  </data>
+  <data name="Section_DIRECTORY_DELAY_IMPORT" xml:space="preserve">
+    <value>Delay Import Descriptor</value>
+  </data>
+  <data name="Section_DIRECTORY_GLOBALPTR" xml:space="preserve">
+    <value>Global Ptr</value>
+  </data>
+  <data name="TypeLib_Wrn_AgnosticAssembly" xml:space="preserve">
+    <value>Importing a type library into a platform agnostic assembly.  This can cause errors if the type library is not truly platform agnostic.</value>
+  </data>
+  <data name="TypeLib_Err_ExistingFileOverwrittenByRefAsmArg2" xml:space="preserve">
+    <value>The assembly for referenced type library, '{0}', will not be imported since it would overwrite existing file '{1}'.</value>
+  </data>
+  <data name="Section_IMAGE_SECTION" xml:space="preserve">
+    <value>Section</value>
+  </data>
+  <data name="TypeLib_Msg_ResolvedRefToPIAArg2" xml:space="preserve">
+    <value>A reference to type library '{0}' has been resolved to primary interop assembly '{1}'.</value>
+  </data>
+  <data name="FileSave" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FileSave.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="iconPe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>iconPe.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>
