@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: ComVisible(false)]
 [assembly: Guid("69830948-8609-4691-b5fc-54752102ea62")]
 [assembly: System.CLSCompliant(false)]
 
@@ -11,14 +10,8 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Plugin.PEImageView")]
 [assembly: AssemblyDescription("Portable Executable (PE & CLI) image viewer")]
-#if DEBUG
-[assembly: AssemblyConfiguration("Debug")]
-#else
-[assembly: AssemblyConfiguration("Release")]
-#endif
-[assembly: AssemblyCompany("Danila Korablin")]
 [assembly: AssemblyProduct("Plugin.PEImageView")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2012-2024")]
+[assembly: AssemblyCopyright("Copyright © Danila Korablin 2012-2025")]
 #endif
 
 /*if $(ConfigurationName) == Release (
