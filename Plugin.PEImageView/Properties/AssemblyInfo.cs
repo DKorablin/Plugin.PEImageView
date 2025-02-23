@@ -8,9 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyMetadata("ProjectUrl", "https://dkorablin.ru/project/Default.aspx?File=89")]
 #else
 
-[assembly: AssemblyTitle("Plugin.PEImageView")]
 [assembly: AssemblyDescription("Portable Executable (PE & CLI) image viewer")]
-[assembly: AssemblyProduct("Plugin.PEImageView")]
 [assembly: AssemblyCopyright("Copyright © Danila Korablin 2012-2025")]
 #endif
 
