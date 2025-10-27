@@ -9,7 +9,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 	internal partial class TypeLibCtrl : UserControl
 	{
 		public TypeLibCtrl()
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		public void AttachTypeLib(String typeLibPath)
 		{

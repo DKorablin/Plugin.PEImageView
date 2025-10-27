@@ -39,7 +39,7 @@
 		DIRECTORY_COR_CMT,
 		/// <summary>ExportAddressTable</summary>
 		DIRECTORY_COR_EAT,
-		/// <summary>ManagedNativeHeaer</summary>
+		/// <summary>ManagedNativeHeader</summary>
 		DIRECTORY_COR_MNH,
 		/// <summary>Strong Name signature</summary>
 		DIRECTORY_COR_SN,

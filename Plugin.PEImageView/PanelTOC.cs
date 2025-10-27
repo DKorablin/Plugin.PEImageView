@@ -17,9 +17,9 @@ using Plugin.PEImageView.Properties;
 
 namespace Plugin.PEImageView
 {
-	// TODO: Сделать открывание PE файлов из:
+	// TODO: Make PE files open from:
 	// 1) GAC
-	// 2) Запущенные процессы
+	// 2) Running processes
 	public partial class PanelTOC : UserControl
 	{
 		private const String Caption = "PE/CLI View";
@@ -46,7 +46,7 @@ namespace Plugin.PEImageView
 
 		public PanelTOC()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 			gridSearch.TreeView = tvToc;
 			SystemImageListHelper.SetImageList(tvToc, this._smallImageList, false);
 		}
@@ -63,25 +63,25 @@ namespace Plugin.PEImageView
 			this.ChangeTitle();
 
 			this.Plugin.Binaries.PeListChanged += new EventHandler<PeListChangedEventArgs>(Plugin_PeListChanged);
-			this.Plugin.Settings.PropertyChanged += Settings_PropertyChanged;
+			this.Plugin.Settings.PropertyChanged += this.Settings_PropertyChanged;
 			base.OnCreateControl();
 		}
 
 		private void Window_Closing(Object sender, CancelEventArgs e)
 		{
 			this.Plugin.Binaries.PeListChanged -= new EventHandler<PeListChangedEventArgs>(Plugin_PeListChanged);
-			this.Plugin.Settings.PropertyChanged -= Settings_PropertyChanged;
+			this.Plugin.Settings.PropertyChanged -= this.Settings_PropertyChanged;
 		}
 
-		/// <summary>Изменить заголовок окна</summary>
+		/// <summary>Change window title</summary>
 		private void ChangeTitle()
 			=> this.Window.Caption = tvToc.Nodes.Count > 0
 				? String.Format("{0} ({1})", PanelTOC.Caption, tvToc.Nodes.Count)
 				: this.Window.Caption = PanelTOC.Caption;
 
-		/// <summary>Поиск узла в дереве по пути к файлу</summary>
-		/// <param name="filePath">Путь к файлу</param>
-		/// <returns>Найденный узел в дереве или null</returns>
+		/// <summary>Search for a node in a tree by file path</summary>
+		/// <param name="filePath">File path</param>
+		/// <returns>The found node in the tree or null</returns>
 		private TreeNode FindNode(String filePath)
 		{
 			foreach(TreeNode node in tvToc.Nodes)
@@ -142,7 +142,7 @@ namespace Plugin.PEImageView
 
 		private void OpenBinaryDocument(PeHeaderType type, String nodeName, String filePath)
 			=> this.Plugin.CreateWindow<DocumentBinary, DocumentBaseSettings>(
-					new DocumentBinarySettings() { FilePath = filePath, Header = type, NodeName = nodeName });
+				new DocumentBinarySettings() { FilePath = filePath, Header = type, NodeName = nodeName });
 
 		private void OpenDirectoryDocument(PeHeaderType type, String nodeName, String filePath)
 		{
@@ -158,20 +158,20 @@ namespace Plugin.PEImageView
 				PEFile pe2 = this.Plugin.Binaries.LoadFile(filePath);
 				ISectionData section = pe2.Sections.GetSection(nodeName);
 				if(section == null)
-					this.Plugin.Trace.TraceInformation("Viwer {0}. Section '{1}' not found", type, nodeName);
+					this.Plugin.Trace.TraceInformation("Viewer {0}. Section '{1}' not found", type, nodeName);
 				else
 					this.OpenBinaryDocument(type, nodeName, filePath);
 				break;
 			default:
 				if(this.Plugin.CreateWindow(type, new DocumentBaseSettings() { FilePath = filePath, }) == null)
-					this.Plugin.Trace.TraceInformation("Viwer {0} not implemented", type);
+					this.Plugin.Trace.TraceInformation("Viewer {0} not implemented", type);
 				break;
 			}
 		}
 
 		private TreeNode FillToc(String filePath)
 		{
-			//Проверка на уже добавленные файлы в дерево
+			//Checking for files already added to the tree
 			TreeNode n = this.FindNode(filePath);
 			if(n != null)
 			{
@@ -209,19 +209,19 @@ namespace Plugin.PEImageView
 
 			splitToc.Panel2Collapsed = false;
 			String filePath = this.SelectedPE;
-			if(e.Node.Parent == null)//Описание файла
+			if(e.Node.Parent == null)//File description
 				lvInfo.DataBind(new FileInfo(filePath));
 
 			try
 			{
 				base.Cursor = Cursors.WaitCursor;
 				PeHeaderType? type = this.SelectedHeader;
-				if(type.HasValue)//Директория PE файла
+				if(type.HasValue)//PE file directory
 				{
 					Object target = this.Plugin.GetSectionData(type.Value, e.Node.Text, filePath);
 					lvInfo.DataBind(target);
 				} else if(e.Node.Tag != null && e.Node.Parent != null)
-					lvInfo.DataBind(e.Node.Tag);//Generic объект
+					lvInfo.DataBind(e.Node.Tag);//Generic object
 			} finally
 			{
 				base.Cursor = Cursors.Default;

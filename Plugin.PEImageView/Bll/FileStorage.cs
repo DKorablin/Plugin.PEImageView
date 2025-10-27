@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
 using AlphaOmega.Debug;
 using Plugin.PEImageView.Directory;
 using SAL.Windows;
 
 namespace Plugin.PEImageView.Bll
 {
+	/// <summary>
+	/// Manages the storage and lifecycle of PE (Portable Executable) files loaded into the application.
+	/// Handles file loading, monitoring for changes, and cleanup of resources.
+	/// </summary>
 	internal class FileStorage : IDisposable
 	{
 		private readonly Object _binLock = new Object();
@@ -18,24 +20,28 @@ namespace Plugin.PEImageView.Bll
 		private readonly Dictionary<String, FileSystemWatcher> _binaryWatcher = new Dictionary<String, FileSystemWatcher>();
 		private readonly PluginWindows _plugin;
 
+		/// <summary>Event raised when the list of loaded PE files changes (files added, removed, or modified)</summary>
 		public event EventHandler<PeListChangedEventArgs> PeListChanged;
 
+		/// <summary>Initializes a new instance of the FileStorage class</summary>
+		/// <param name="plugin">The plugin instance that owns this storage</param>
+		/// <exception cref="ArgumentNullException">Thrown when plugin is null</exception>
 		internal FileStorage(PluginWindows plugin)
 		{
 			this._plugin = plugin ?? throw new ArgumentNullException(nameof(plugin));
 			this._plugin.Settings.PropertyChanged += Settings_PropertyChanged;
 		}
 
-		/// <summary>Получить информацию по PE файлу. Если файл не открыт, то открыть его</summary>
-		/// <param name="filePath">Путь к файлу, информацию по которому необходимо почитать</param>
-		/// <returns>Информация по PE/COFF файлу или null</returns>
+		/// <summary>Get information about a PE file. If the file is not open, open it.</summary>
+		/// <param name="filePath">Path to the file whose information you want to read.</param>
+		/// <returns>Information about the PE/COFF file or null.</returns>
 		public PEFile LoadFile(String filePath)
 			=> this.LoadFile(filePath, false);
 
-		/// <summary>Получить информацию по PE файлу</summary>
-		/// <param name="filePath">Путь к файлу, информацию по которому необходимо почитать</param>
-		/// <param name="noLoad">Поискать файл в уже подгруженных файлах и если такой файл не найден не загружать</param>
-		/// <returns>Информация по PE/COFF файлу или null</returns>
+		/// <summary>Get information about a PE file</summary>
+		/// <param name="filePath">Path to the file whose information you want to read</param>
+		/// <param name="noLoad">Search for the file in already loaded files and, if such a file is not found, do not load</param>
+		/// <returns>Information about the PE/COFF file or null</returns>
 		public PEFile LoadFile(String filePath, Boolean noLoad)
 		{
 			if(String.IsNullOrEmpty(filePath))
@@ -49,7 +55,7 @@ namespace Plugin.PEImageView.Bll
 			}
 
 			if(!File.Exists(filePath))
-				return null;//Это необходимо для отсечки файлов, которые были загружены через память
+				return null;//This is necessary to cut off files that were loaded through memory.
 
 			result = this.LoadFile(filePath, true);
 			if(result == null)
@@ -73,7 +79,7 @@ namespace Plugin.PEImageView.Bll
 						}
 						result = new PEFile(filePath, loader);
 						this._binaries.Add(filePath, result);
-						if(!this._binaryWatcher.ContainsKey(filePath)//При обновлении файла удаляется только файл, а не его монитор
+						if(!this._binaryWatcher.ContainsKey(filePath)//When you update a file, only the file is deleted, not its monitor.
 							&& this._plugin.Settings.MonitorFileChange)
 							this.RegisterFileWatcher(filePath);
 					}
@@ -81,8 +87,9 @@ namespace Plugin.PEImageView.Bll
 			return result;
 		}
 
-		/// <summary>Закрыть ранее открытый файл</summary>
-		/// <param name="filePath">Путь к файлу для закрывания</param>
+		/// <summary>Closes all windows displaying the specified file and unloads it from memory</summary>
+		/// <param name="filePath">Path to the file to unload</param>
+		/// <exception cref="ArgumentNullException">Thrown when filePath is null or empty</exception>
 		public void UnloadFile(String filePath)
 		{
 			if(String.IsNullOrEmpty(filePath))
@@ -95,14 +102,14 @@ namespace Plugin.PEImageView.Bll
 			try
 			{
 				IWindow[] windows = this._plugin.HostWindows.Windows.ToArray();
-				for(Int32 loop = windows.Length - 1;loop >= 0;loop--)
+				for(Int32 loop = windows.Length - 1; loop >= 0; loop--)
 				{
 					IWindow wnd = windows[loop];
 					DocumentBase ctrl = wnd.Control as DocumentBase;
 					if(ctrl != null && ctrl.FilePath == filePath)
 						wnd.Close();
 				}
-				if(filePath.StartsWith(Constant.BinaryFile))//Бинарный файл удаляется сразу из списка после закрытия
+				if(filePath.StartsWith(Constant.BinaryFile))//The binary file is removed from the list immediately after closing.
 					this.OnPeListChanged(PeListChangeType.Removed, filePath);
 			} finally
 			{
@@ -133,6 +140,9 @@ namespace Plugin.PEImageView.Bll
 			this._binaryWatcher.Add(filePath, watcher);
 		}
 
+		/// <summary>Stops monitoring a file for changes and disposes the associated watcher</summary>
+		/// <param name="filePath">Path to the file to stop monitoring</param>
+		/// <exception cref="ArgumentNullException">Thrown when filePath is null or empty</exception>
 		public void UnregisterFileWatcher(String filePath)
 		{
 			if(String.IsNullOrEmpty(filePath))
@@ -145,8 +155,8 @@ namespace Plugin.PEImageView.Bll
 			}
 		}
 
-		/// <summary>Добавить файл из памяти в список открытых файлов</summary>
-		/// <param name="memFile">Файл из памяти</param>
+		/// <summary>Add a file from memory to the list of open files</summary>
+		/// <param name="memFile">File from memory</param>
 		public void OpenFile(Byte[] memFile)
 		{
 			if(memFile == null || memFile.Length == 0)
@@ -162,14 +172,16 @@ namespace Plugin.PEImageView.Bll
 			this.OnPeListChanged(PeListChangeType.Added, name);
 		}
 
-		/// <summary>Добавить файл в список открытых файлов</summary>
-		/// <param name="filePath">Путь к файлу</param>
+		/// <summary>Adds a file to the list of tracked files and notifies listeners of the change</summary>
+		/// <param name="filePath">Path to the file to open</param>
+		/// <returns>True if the file was added successfully, false if it was already in the list</returns>
+		/// <exception cref="ArgumentNullException">Thrown when filePath is null or empty</exception>
 		public Boolean OpenFile(String filePath)
 		{
 			if(String.IsNullOrEmpty(filePath))
 				throw new ArgumentNullException(nameof(filePath));
 			if(filePath.StartsWith(Constant.BinaryFile))
-				return false;//Это необходимо для отсечки файлов, которые были загружены через память
+				return false;//This is necessary to cut off files that were loaded through memory.
 
 			String[] loadedFiles = this._plugin.Settings.LoadedFiles;
 			if(loadedFiles.Contains(filePath))
@@ -187,6 +199,9 @@ namespace Plugin.PEImageView.Bll
 			}
 		}
 
+		/// <summary>Removes a file from the list of tracked files and notifies listeners of the change</summary>
+		/// <param name="filePath">Path to the file to close</param>
+		/// <exception cref="ArgumentNullException">Thrown when filePath is null or empty</exception>
 		public void CloseFile(String filePath)
 		{
 			if(String.IsNullOrEmpty(filePath))
@@ -195,13 +210,14 @@ namespace Plugin.PEImageView.Bll
 			String[] loadedFiles = this._plugin.Settings.LoadedFiles;
 			List<String> files = new List<String>(loadedFiles);
 			if(files.Remove(filePath))
-			{//Если это файл из памяти, то его нет в списке файлов
+			{//If this is a file from memory, then it is not in the file list.
 				this._plugin.Settings.LoadedFiles = files.ToArray();
 				this._plugin.HostWindows.Plugins.Settings(this._plugin).SaveAssemblyParameters();
 				this.OnPeListChanged(PeListChangeType.Removed, filePath);
 			}
 		}
 
+		/// <summary>Releases all resources used by the FileStorage instance</summary>
 		public void Dispose()
 		{
 			lock(this._binLock)
@@ -218,12 +234,16 @@ namespace Plugin.PEImageView.Bll
 				this._binaryWatcher.Clear();
 			}
 		}
-		/// <summary>Изменился список загруженных файлов</summary>
-		/// <param name="type">Тип изменения</param>
-		/// <param name="filePath">Путь к файлу, на которм произошло изменение</param>
+
+		/// <summary>Raises the PeListChanged event with the specified change type and file path</summary>
+		/// <param name="type">Type of change that occurred</param>
+		/// <param name="filePath">Path to the file that changed</param>
 		private void OnPeListChanged(PeListChangeType type, String filePath)
 			=> this.PeListChanged?.Invoke(this, new PeListChangedEventArgs(type, filePath));
 
+		/// <summary>Handles changes to plugin settings, particularly the MonitorFileChange setting</summary>
+		/// <param name="sender">The source of the property change event</param>
+		/// <param name="e">Event arguments containing the name of the changed property</param>
 		private void Settings_PropertyChanged(Object sender, PropertyChangedEventArgs e)
 		{
 			switch(e.PropertyName)
@@ -254,6 +274,9 @@ namespace Plugin.PEImageView.Bll
 			}
 		}
 
+		/// <summary>Handles file system change events for monitored files</summary>
+		/// <param name="sender">The source of the file system event</param>
+		/// <param name="e">Event arguments containing information about the file system change</param>
 		private void watcher_Changed(Object sender, FileSystemEventArgs e)
 		{
 			FileSystemWatcher watcher = (FileSystemWatcher)sender;
@@ -267,7 +290,7 @@ namespace Plugin.PEImageView.Bll
 
 					do
 					{
-						if(info.Exists == false)
+						if(!info.Exists)
 							goto case WatcherChangeTypes.Deleted;
 
 						try
@@ -306,9 +329,9 @@ namespace Plugin.PEImageView.Bll
 			}
 		}
 
-		/// <summary>Получить уникальное наименование бинарного файла</summary>
-		/// <param name="index">Индекс, если файл с таким наименованием уже загружен</param>
-		/// <returns>Уникальное наименование файла</returns>
+		/// <summary>Get the unique name of a binary file</summary>
+		/// <param name="index">Index, if a file with that name is already loaded</param>
+		/// <returns>Unique file name</returns>
 		private String GetBinaryUniqueName(UInt32 index)
 		{
 			String indexName = index > 0

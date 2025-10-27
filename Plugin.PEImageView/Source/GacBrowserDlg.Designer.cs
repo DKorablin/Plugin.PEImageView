@@ -65,7 +65,7 @@
 			// 
 			this.gridSearch.DataGrid = null;
 			this.gridSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.gridSearch.EnableSearchHilight = false;
+			this.gridSearch.EnableSearchHighlight = false;
 			this.gridSearch.ListView = null;
 			this.gridSearch.Location = new System.Drawing.Point(3, 155);
 			this.gridSearch.Name = "gridSearch";

@@ -17,18 +17,17 @@ using SAL.Windows;
 namespace Plugin.PEImageView
 {
 	/// <summary>
-	/// Интерфейс:
-	/// При открытии файла открывается панель слева с TOC PE Файла в виде:
-	/// ListView(TreeView) - Для основных свойств[TOC'ов]
-	/// ListView - Для пропертей основных свойств[TOC'ов]
-	/// TextArea - Для описания основного свойства[TOC'а]
-	/// И в PluginWindows заносится указатель на PEInfo открытого файла
-	/// 
-	/// При двойном нажатии на элемент TOC'а, открывается документ соответствующий определённому TOC'у, который будет уже выводить информацию для каждого TOC'а по отдельности.
-	/// При этом, в Window.Settings[] заносится путь к PE файлу TOC которого отображается.
-	/// 
-	/// При открытии документа, документ работает с PEInfo объектом в PluginWindows.
-	/// При открытии программы и открытии одного из документов TOC'а, документ обращаетсяв PluginWindows за PEInfo объектом и в случае необходимости, PluginWindows создаёт соответствующий PEInfo и отдаёт его документу.
+	/// Interface:
+	/// When opening a file, a panel opens on the left with the PE File's TOC in the following format:
+	/// ListView(TreeView) - For main properties [TOCs]
+	/// ListView - For properties of main properties [TOCs]
+	/// TextArea - For the description of the main property [TOC]
+	/// A pointer to the PEInfo of the opened file is added to PluginWindows.
+	///
+	/// Double-clicking a TOC element opens the document corresponding to the specified TOC, which will then display information for each TOC separately.
+	/// The path to the PE file whose TOC is being displayed is added to Window.Settings[].
+	///
+	/// When opening a document, the document works with the PEInfo object in PluginWindows. /// When the program opens and one of the TOC documents is opened, the document requests a PEInfo object from PluginWindows, and if necessary, PluginWindows creates the appropriate PEInfo and assigns it to the document.
 	/// </summary>
 	public class PluginWindows : IPlugin, IPluginSettings<PluginSettings>
 	{
@@ -46,10 +45,10 @@ namespace Plugin.PEImageView
 		private IMenuItem MenuPeInfo { get; set; }
 		private IMenuItem MenuWinApi { get; set; }
 
-		/// <summary>Настройки для взаимодействия из хоста</summary>
+		/// <summary>Settings for interaction from the host</summary>
 		Object IPluginSettings.Settings => this.Settings;
 
-		/// <summary>Настройки для взаимодействия из плагина</summary>
+		/// <summary>Settings for interaction from the plugin</summary>
 		public PluginSettings Settings
 		{
 			get
@@ -63,7 +62,7 @@ namespace Plugin.PEImageView
 			}
 		}
 
-		/// <summary>Хранилище открытых файлов</summary>
+		/// <summary>Open File Storage</summary>
 		internal FileStorage Binaries
 		{
 			get
@@ -151,7 +150,7 @@ namespace Plugin.PEImageView
 			{
 				String ext = Path.GetExtension(filePath).ToLowerInvariant();
 				switch(ext)
-				{//TODO: Fter trsansferring it to .NET 4 change to Directory.EnumerateFiles
+				{//TODO: After transferring it to .NET 4 change to Directory.EnumerateFiles
 				case ".dll":
 				case ".exe":
 					result.Add(filePath);
@@ -200,8 +199,7 @@ namespace Plugin.PEImageView
 			if(this.MenuWinApi != null && this.MenuWinApi.Items.Count == 0)
 				this.HostWindows.MainMenu.Items.Remove(this.MenuWinApi);
 
-			if(NodeExtender._nullFont != null)
-				NodeExtender._nullFont.Dispose();
+			NodeExtender._nullFont?.Dispose();
 
 			if(this._binaries != null)
 				this._binaries.Dispose();
@@ -289,7 +287,7 @@ namespace Plugin.PEImageView
 					}
 					return values.ToString();
 				} else if(type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-					return type.ToString();//Added for properties whitch return type is IEnumerable
+					return type.ToString();//Added for properties which return type is IEnumerable
 				else
 					return value.ToString();
 			}
@@ -301,9 +299,9 @@ namespace Plugin.PEImageView
 			return this.GetSectionData(type, nodeName, pe);
 		}
 
-		/// <summary>Получить объект, соответсвующий определённому идентификатору енума</summary>
-		/// <param name="type">Тип заголовка</param>
-		/// <param name="filePath">Путь к PE файлу</param>
+		/// <summary>Get an object corresponding to a specific enum identifier</summary>
+		/// <param name="type">Header type</param>
+		/// <param name="filePath">Path to the PE file</param>
 		/// <returns></returns>
 		internal Object GetSectionData(PeHeaderType type, String nodeName, PEFile info)
 		{

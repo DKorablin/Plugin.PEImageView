@@ -47,7 +47,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 		{
 			foreach(var item in template)
 			{
-				if(item.IsSepearator)
+				if(item.IsSeparator)
 					yield return new ToolStripSeparator();
 				else
 				{
