@@ -20,15 +20,13 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.UI
 				}
 				return base.Assembly;
 			}
-			set { base.Assembly = value; }
+			set => base.Assembly = value;
 		}
 
 		public TreeNodeTypeLib(ComTypeAnalyzer analyzer)
 			: base(analyzer.InputFile)
 		{
-			_ = analyzer ?? throw new ArgumentNullException(nameof(analyzer));
-
-			this._analyzer = analyzer;
+			this._analyzer = analyzer ?? throw new ArgumentNullException(nameof(analyzer));
 			base.AssemblyPath = analyzer.InputFile;
 		}
 	}

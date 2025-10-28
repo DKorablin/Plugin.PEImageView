@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using AlphaOmega.Debug;
-using AlphaOmega.Debug.NTDirectory;
+using AlphaOmega.Windows.Forms;
 using Plugin.PEImageView.Bll;
 using Plugin.PEImageView.Directory;
-using Plugin.PEImageView.Source;
-using SAL.Flatbed;
-using SAL.Windows;
-using AlphaOmega.Debug.CorDirectory;
-using AlphaOmega.Windows.Forms;
-using System.ComponentModel;
 using Plugin.PEImageView.Properties;
+using Plugin.PEImageView.Source;
+using SAL.Windows;
 
 namespace Plugin.PEImageView
 {
-	// TODO: Make PE files open from:
-	// 1) GAC
-	// 2) Running processes
 	public partial class PanelTOC : UserControl
 	{
 		private const String Caption = "PE/CLI View";
 		private SystemImageList _smallImageList= new SystemImageList(SystemImageListSize.SmallIcons);
-		#region Properties
 
 		private PluginWindows Plugin => (PluginWindows)this.Window.Plugin;
 
@@ -42,7 +35,6 @@ namespace Plugin.PEImageView
 				return (String)node.Tag;
 			}
 		}
-		#endregion Properties
 
 		public PanelTOC()
 		{
@@ -54,7 +46,7 @@ namespace Plugin.PEImageView
 		protected override void OnCreateControl()
 		{
 			this.Window.SetTabPicture(Resources.iconPe);
-			this.Window.Closing += new EventHandler<CancelEventArgs>(Window_Closing);
+			this.Window.Closing += new EventHandler<CancelEventArgs>(this.Window_Closing);
 			lvInfo.Plugin = this.Plugin;
 
 			String[] loadedFiles = this.Plugin.Settings.LoadedFiles;
@@ -62,21 +54,21 @@ namespace Plugin.PEImageView
 				this.FillToc(file);
 			this.ChangeTitle();
 
-			this.Plugin.Binaries.PeListChanged += new EventHandler<PeListChangedEventArgs>(Plugin_PeListChanged);
+			this.Plugin.Binaries.PeListChanged += new EventHandler<PeListChangedEventArgs>(this.Plugin_PeListChanged);
 			this.Plugin.Settings.PropertyChanged += this.Settings_PropertyChanged;
 			base.OnCreateControl();
 		}
 
 		private void Window_Closing(Object sender, CancelEventArgs e)
 		{
-			this.Plugin.Binaries.PeListChanged -= new EventHandler<PeListChangedEventArgs>(Plugin_PeListChanged);
+			this.Plugin.Binaries.PeListChanged -= new EventHandler<PeListChangedEventArgs>(this.Plugin_PeListChanged);
 			this.Plugin.Settings.PropertyChanged -= this.Settings_PropertyChanged;
 		}
 
 		/// <summary>Change window title</summary>
 		private void ChangeTitle()
 			=> this.Window.Caption = tvToc.Nodes.Count > 0
-				? String.Format("{0} ({1})", PanelTOC.Caption, tvToc.Nodes.Count)
+				? $"{PanelTOC.Caption} ({tvToc.Nodes.Count})"
 				: this.Window.Caption = PanelTOC.Caption;
 
 		/// <summary>Search for a node in a tree by file path</summary>

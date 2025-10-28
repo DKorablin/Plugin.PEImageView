@@ -42,7 +42,7 @@ namespace Plugin.PEImageView.Controls
 				List<ListViewItem> oldItems = new List<ListViewItem>(base.Items.Cast<ListViewItem>());
 				MetaColumn[] columns = table.Columns;
 				//this.SetColumns(columns.Select(p => p.Name).ToArray());
-				String[] subItems = Array.ConvertAll<String, String>(new String[columns.Length], delegate(String a) { return String.Empty; });
+				String[] subItems = Array.ConvertAll<String, String>(new String[columns.Length], a => String.Empty);
 
 				foreach(MetaRow row in table.Rows)
 				{
@@ -69,7 +69,8 @@ namespace Plugin.PEImageView.Controls
 						newItems.Add(item);
 				}
 				base.Items.AddRange(newItems.ToArray());
-				//Удаление старых строк
+
+				//Removing old rows
 				foreach(ListViewItem oldItem in oldItems)
 					base.Items.Remove(oldItem);
 				base.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -98,21 +99,21 @@ namespace Plugin.PEImageView.Controls
 
 				foreach(Object row in rows)
 				{
-					//Код обновления ранее добавленной строки
+					//Update code for a previously added line
 					Boolean added = false;
 					ListViewItem item = oldItems.FirstOrDefault(p => p.Tag == row);
 					if(item == null)
 						item = new ListViewItem() { Tag = row, };
 					else
 					{
-						added = true;//HACK: Почему-бы не завершить цикл??? o_0
+						added = true;//HACK: Why not end the loop??? o_0
 						oldItems.Remove(item);
 					}
 
 					if(members == null)
 					{
 						members = row.GetType().GetMembers().Where(p => p.MemberType == MemberTypes.Field || p.MemberType == MemberTypes.Property).ToArray();
-						//Установка колонок
+						//Setting up columns
 						//this.SetColumns(members.Select(p => p.Name).ToArray());
 					}
 
@@ -145,11 +146,11 @@ namespace Plugin.PEImageView.Controls
 					if(!added)
 						newItems.Add(item);
 				}
-				if(members == null)//Нет данных
+				if(members == null)//No data
 					base.Columns.Clear();
 
 				base.Items.AddRange(newItems.ToArray());
-				//Удаление старых строк
+				//Removing old columns
 				foreach(ListViewItem oldItem in oldItems)
 					base.Items.Remove(oldItem);
 				base.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -164,22 +165,21 @@ namespace Plugin.PEImageView.Controls
 				if(column.Text == name)
 					return column;
 
-			//throw new ArgumentException(String.Format("Coumn {0} not found", name));
 			return base.Columns.Add(name);
 		}
 
-		[Obsolete("Метод создаёт лютый писец с колонками при биндинге разных массивов",true)]
+		[Obsolete("The method creates a fierce scribe with columns when binding different arrays", true)]
 		private void SetColumns(String[] columns)
 		{
 			for(Int32 loop = base.Columns.Count - 1;loop >= 0;loop--)
-			{//Удаляю колонки, которых нет в объекте
+			{//I delete columns that are not in the object.
 				ColumnHeader column = base.Columns[loop];
 				if(!columns.Any(p => p == column.Text))
 					column.Dispose();
 			}
 
 			foreach(String column in columns)
-			{//Добавляю колонки, которых нет в списке
+			{//Adding columns that are not in the list
 				Boolean found = false;
 				foreach(ColumnHeader columnHeader in base.Columns)
 					if(columnHeader.Text == column)

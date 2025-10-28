@@ -1,5 +1,4 @@
-﻿using System;
-using DebugPe = AlphaOmega.Debug.NTDirectory.Debug;
+﻿using DebugPe = AlphaOmega.Debug.NTDirectory.Debug;
 
 namespace Plugin.PEImageView.Directory
 {
@@ -7,7 +6,7 @@ namespace Plugin.PEImageView.Directory
 	{
 		public DocumentDebug()
 			:base(PeHeaderType.DIRECTORY_DEBUG)
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		protected override void ShowFile(AlphaOmega.Debug.PEFile info)
 		{

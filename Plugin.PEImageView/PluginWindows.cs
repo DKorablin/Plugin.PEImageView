@@ -5,9 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using AlphaOmega.Debug;
-using AlphaOmega.Debug.NTDirectory;
 using Plugin.PEImageView.Bll;
 using Plugin.PEImageView.Directory;
 using Plugin.PEImageView.Properties;
@@ -136,7 +134,7 @@ namespace Plugin.PEImageView
 		/// <returns>The given object instance</returns>
 		public Object CreateEntityInstance(String filePath)
 		{
-			PEFile result = new PEFile(filePath,StreamLoader.FromFile(filePath));
+			PEFile result = new PEFile(filePath, StreamLoader.FromFile(filePath));
 			return result;
 		}
 
@@ -183,7 +181,7 @@ namespace Plugin.PEImageView
 
 					this.MenuPeInfo = this.MenuWinApi.Create("&PE/CLI View");
 					this.MenuPeInfo.Name = "View.Executable.PEView";
-					this.MenuPeInfo.Click += (sender, e) => { this.CreateWindow(typeof(PanelTOC).ToString(), true, null); };
+					this.MenuPeInfo.Click += (sender, e) => this.CreateWindow(typeof(PanelTOC).ToString(), true, null);
 
 					this.MenuWinApi.Items.Add(this.MenuPeInfo);
 					return true;
@@ -199,10 +197,9 @@ namespace Plugin.PEImageView
 			if(this.MenuWinApi != null && this.MenuWinApi.Items.Count == 0)
 				this.HostWindows.MainMenu.Items.Remove(this.MenuWinApi);
 
-			NodeExtender._nullFont?.Dispose();
+			NodeExtender.DisposeFonts();
 
-			if(this._binaries != null)
-				this._binaries.Dispose();
+			this._binaries?.Dispose();
 			return true;
 		}
 
@@ -220,23 +217,23 @@ namespace Plugin.PEImageView
 
 			if(type.IsEnum)
 				return value.ToString();
-			else if(type==typeof(Char))
+			else if(type == typeof(Char))
 			{
 				switch((Char)value)
-					{
-					case '\'':	return "\\\'";
-					case '\"':	return "\\\"";
-					case '\0':	return "\\0";
-					case '\a':	return "\\a";
-					case '\b':	return "\\b";
-					case '\f':	return "\\b";
-					case '\t':	return "\\t";
-					case '\n':	return "\\n";
-					case '\r':	return "\\r";
-					case '\v':	return "\\v";
-					default:	return value.ToString();
-					}
-			} else if(value is IFormattable)
+				{
+				case '\'': return "\\\'";
+				case '\"': return "\\\"";
+				case '\0': return "\\0";
+				case '\a': return "\\a";
+				case '\b': return "\\b";
+				case '\f': return "\\b";
+				case '\t': return "\\t";
+				case '\n': return "\\n";
+				case '\r': return "\\r";
+				case '\v': return "\\v";
+				default: return value.ToString();
+				}
+			} else if(value is IFormattable fValue)
 			{
 				type = type.GetRealType();//INullable<Enum>
 				if(type.IsEnum)
@@ -256,14 +253,13 @@ namespace Plugin.PEImageView
 				case TypeCode.Double:
 				case TypeCode.Decimal:
 					if(this.Settings.ShowAsHexValue)
-						return "0x" + ((IFormattable)value).ToString("X", CultureInfo.CurrentCulture);
+						return "0x" + fValue.ToString("X", CultureInfo.CurrentCulture);
 					else
-						return ((IFormattable)value).ToString("n0", CultureInfo.CurrentCulture);
+						return fValue.ToString("n0", CultureInfo.CurrentCulture);
 				default:
 					return value.ToString();
 				}
-			}
-			else
+			} else
 			{
 				Type elementType = type.HasElementType ? type.GetElementType() : null;
 				if(elementType != null && elementType.IsPrimitive && type.BaseType == typeof(Array))
@@ -283,7 +279,7 @@ namespace Plugin.PEImageView
 							}
 							values.Append((this.FormatValue(item) ?? Resources.NullString) + ", ");
 						}
-						values.Append("}");
+						values.Append('}');
 					}
 					return values.ToString();
 				} else if(type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
@@ -296,14 +292,14 @@ namespace Plugin.PEImageView
 		internal Object GetSectionData(PeHeaderType type, String nodeName, String filePath)
 		{
 			PEFile pe = this.Binaries.LoadFile(filePath);
-			return this.GetSectionData(type, nodeName, pe);
+			return GetSectionData(type, nodeName, pe);
 		}
 
 		/// <summary>Get an object corresponding to a specific enum identifier</summary>
 		/// <param name="type">Header type</param>
 		/// <param name="filePath">Path to the PE file</param>
 		/// <returns></returns>
-		internal Object GetSectionData(PeHeaderType type, String nodeName, PEFile info)
+		internal static Object GetSectionData(PeHeaderType type, String nodeName, PEFile info)
 		{
 			switch(type)
 			{
@@ -387,7 +383,7 @@ namespace Plugin.PEImageView
 
 		internal IWindow CreateWindow(String typeName, Boolean searchForOpened, Object args)
 			=> this.DocumentTypes.TryGetValue(typeName, out DockState state)
-				? this.HostWindows.Windows.CreateWindow(this, typeName, true, state, args)
+				? this.HostWindows.Windows.CreateWindow(this, typeName, searchForOpened, state, args)
 				: null;
 
 		internal IWindow CreateWindow(PeHeaderType typeName, DocumentBaseSettings args)

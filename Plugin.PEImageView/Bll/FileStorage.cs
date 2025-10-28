@@ -69,7 +69,7 @@ namespace Plugin.PEImageView.Bll
 						{
 						case PluginSettings.PeLoader.StreamLoader:
 							FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-							loader = new StreamLoader(stream);//.FromFile(filePath);
+							loader = new StreamLoader(stream);
 							break;
 						case PluginSettings.PeLoader.Win32Loader:
 							loader = Win32Loader.FromFile(filePath);

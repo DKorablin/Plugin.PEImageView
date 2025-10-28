@@ -37,7 +37,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 				items.Add(this._list.CreateReflectedListItem(versionInfo,
 					member,
 					"VersionInfo",
-					delegate { return member.GetMemberValue(versionInfo); }));
+					() => member.GetMemberValue(versionInfo)));
 
 			//FileInfo
 			var fileInfo = version.FileInfo;
@@ -48,7 +48,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 					items.Add(this._list.CreateReflectedListItem(fileInfo.Value,
 						member,
 						"FileInfo",
-						delegate { return member.GetMemberValue(fileInfo.Value); }));
+						() => member.GetMemberValue(fileInfo.Value)));
 			}
 
 			//Tables
@@ -63,10 +63,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 						String name = row.szKey;
 						if(String.IsNullOrEmpty(name))
 							name = tableName;
-						items.Add(this._list.CreateListItem(row, name,
-							row.ToString(),
-							String.Format("{0} ({1})", tableName, tableTypeName),
-							false));
+						items.Add(this._list.CreateListItem(row, name, row.ToString(), $"{tableName} ({tableTypeName})", false));
 					}
 				}
 			}

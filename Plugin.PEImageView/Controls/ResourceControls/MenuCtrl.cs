@@ -11,7 +11,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 		private MenuStrip _resourceMenu;
 
 		public MenuCtrl()
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		public void BindControl(IEnumerable<TemplateMenu> template)
 		{

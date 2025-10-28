@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -75,3 +76,47 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 		}
 	}
 }
+#else
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.InteropServices; // Added for placeholder TypeLibImporterFlags
+using System.Runtime.InteropServices.ComTypes;
+
+// Placeholder for missing TypeLibImporterFlags in non-NETFRAMEWORK targets; only minimal value needed.
+namespace System.Runtime.InteropServices
+{
+	[Flags]
+	internal enum TypeLibImporterFlags
+	{
+		None = 0,
+	}
+}
+
+namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
+{
+	internal class ComTypeAnalyzer
+	{
+		public Dictionary<Guid, Assembly> ReferencedAssemblies { get; } = new Dictionary<Guid, Assembly>();
+		public Dictionary<Guid, Assembly> ReferencedAssemblies2 { get; } = new Dictionary<Guid, Assembly>();
+		public Dictionary<Guid, Assembly> AlreadyImportedLibraries { get; } = new Dictionary<Guid, Assembly>();
+		public List<Guid> ImportingAssemblies { get; } = new List<Guid>();
+
+		public string InputFile { get; }
+		public TypeLibImporterFlags Flags { get; }
+		public string OutputDir { get; }
+
+		public ComTypeAnalyzer(string inputFile, TypeLibImporterFlags flags, string outputDir)
+		{
+			InputFile = inputFile;
+			Flags = flags;
+			OutputDir = outputDir;
+		}
+
+		public Assembly ImportAssembly()
+			=> throw new PlatformNotSupportedException("Runtime TypeLib import is only supported on .NET Framework.");
+		public Assembly ImportAssembly(ITypeLib typeLib, String assemblyFileName, String assemblyNamespace, Version version)
+			=> throw new PlatformNotSupportedException("Runtime TypeLib import is only supported on .NET Framework.");
+	}
+}
+#endif

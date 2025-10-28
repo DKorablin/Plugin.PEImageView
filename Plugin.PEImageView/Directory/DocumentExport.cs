@@ -16,7 +16,7 @@ namespace Plugin.PEImageView.Directory
 
 		public DocumentExport()
 			: base(PeHeaderType.DIRECTORY_EXPORT)
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		protected override void ShowFile(AlphaOmega.Debug.PEFile info)
 		{
@@ -39,7 +39,7 @@ namespace Plugin.PEImageView.Directory
 				foreach(var function in export.GetExportFunctions())
 				{
 					ListViewItem item = new ListViewItem(group);
-					String[] subItems = Array.ConvertAll<String, String>(new String[lvFunctions.Columns.Count], delegate(String a) { return String.Empty; });
+					String[] subItems = Array.ConvertAll<String, String>(new String[lvFunctions.Columns.Count], a => String.Empty);
 					item.SubItems.AddRange(subItems);
 					item.SubItems[colAddress.Index].Text = $"0x{function.Address:X8}";
 					item.SubItems[colName.Index].Text = function.Name;

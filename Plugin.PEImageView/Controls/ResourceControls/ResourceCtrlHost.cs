@@ -6,6 +6,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 	internal class ResourceCtrlHost : Panel
 	{
 		public PluginWindows Plugin { get; set; }
+
 		public IResourceCtrl Control { get; private set; }
 
 		public void ShowControl(VisualizerType type, Object data)
@@ -64,14 +65,14 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 			this.Control = ctrl;
 		}
 
-		/// <summary>Скрываю элемент управления при выборе другого элемента</summary>
+		/// <summary>Hide a control when another element is selected</summary>
 		public void HideControl()
 		{
 			if(this.Control != null)
 				this.Control.Control.Visible = false;
 		}
 
-		/// <summary>Удаление ранее приделанного элемента управления</summary>
+		/// <summary>Removing a previously attached control</summary>
 		public void RemoveControl()
 		{
 			if(this.Control != null)

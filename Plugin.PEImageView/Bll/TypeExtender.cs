@@ -35,6 +35,13 @@ namespace Plugin.PEImageView.Bll
 			return type;
 		}
 
+		public static IEnumerable<MemberInfo> GetSearchableMembers(this Type type)
+		{
+			foreach(MemberInfo member in type.GetMembers())
+				if(type.IsMemberSearchable(member))
+					yield return member;
+		}
+
 		private static Boolean IsMemberSearchable(this Type type, FieldInfo field)
 			=> true;
 
@@ -47,26 +54,19 @@ namespace Plugin.PEImageView.Bll
 				&& !method.Name.StartsWith("get_")
 				&& !method.Name.StartsWith("set_");
 			if(result)
-			{//TODO: Получение значения по енумам
-				ParameterInfo[] prms = method.GetParameters();
-				if(prms.Length == 1)
-					if(!prms[0].ParameterType.IsEnum)
+			{//TODO: Getting the value from enums
+				ParameterInfo[] info = method.GetParameters();
+				if(info.Length == 1)
+					if(!info[0].ParameterType.IsEnum)
 						return false;
 			}
 			return result;
 		}
 
-		public static IEnumerable<MemberInfo> GetSearchableMembers(this Type type)
-		{
-			foreach(MemberInfo member in type.GetMembers())
-				if(type.IsMemberSearchable(member))
-					yield return member;
-		}
-
 		private static Boolean IsMemberSearchable(this Type type, MemberInfo member)
 		{
 			if(member.DeclaringType != type && member.DeclaringType != type.BaseType)
-				return false;//member.DeclaringType == type.BaseType Используется для отображения наследованных классов (Пример: StringHeap:StreamHeaderTyped<String>.Data). Но возможно появление бесконечных рекурсий
+				return false;//member.DeclaringType == type.BaseType Used to display inherited classes (Example: StringHeap:StreamHeaderTyped<String>.Data). But infinite recursions may occur
 
 			switch(member.MemberType)
 			{
@@ -105,7 +105,6 @@ namespace Plugin.PEImageView.Bll
 			case MemberTypes.Field:
 				return ((FieldInfo)member).GetValue(obj);
 			case MemberTypes.Property:
-				//return ((PropertyInfo)member).PropertyType.ToString();
 				return ((PropertyInfo)member).GetValue(obj, null);
 			default: throw new NotImplementedException();
 			}

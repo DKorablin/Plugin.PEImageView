@@ -7,14 +7,12 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 {
 	internal partial class DialogCtrl : UserControl
 	{
-		#region Fields
 		private static Point? _baseUnits;
 		private DialogTemplate _template;
 		private Form _resourceDlg;
 		private readonly PluginWindows _plugin;
 		private const Int32 _denominatorX = 4;
 		private const Int32 _denominatorY = 8;
-		#endregion Fields
 
 		private static Point BaseUnits
 		{
@@ -34,14 +32,14 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 		public DialogCtrl(PluginWindows plugin)
 		{
 			this._plugin = plugin;
-			InitializeComponent();
+			this.InitializeComponent();
 		}
 
 		public void BindTemplate(DialogTemplate template)
 		{
 			_ = template ?? throw new ArgumentNullException(nameof(template));
 
-			//TODO: Будет работать только для системного шрифта (8px MSSansSerif)
+			//TODO: Will only work for system font (8px MSSansSerif)
 			//http://cboard.cprogramming.com/windows-programming/98006-how-convert-dialog-units-pixels.html
 			Point baseUnits = DialogCtrl.BaseUnits;
 
@@ -75,7 +73,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 				switch(control.ItemSystemClass)
 				{
 				case DialogItemTemplate.ControlSystemClass.Button:
-					// HACK: Im lazy to find anoter route...
+					// HACK: Im lazy to find another route...
 					//AlphaOmega.Debug.WinNT.Resource.BS buttonStyle = (AlphaOmega.Debug.WinNT.Resource.BS)((UInt32)control.Styles & (UInt32)AlphaOmega.Debug.WinNT.Resource.BS.TYPEMASK);
 
 					DialogButtonTemplate tplButton = (DialogButtonTemplate)control;

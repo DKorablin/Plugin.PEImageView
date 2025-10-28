@@ -14,7 +14,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 		public Control Control => this._control;
 
 		public String[] SelectableData
-			=> Array.ConvertAll(DocumentBinary.DisplayModes, delegate(DisplayMode mode) { return mode.ToString(); });
+			=> Array.ConvertAll(DocumentBinary.DisplayModes, mode => mode.ToString());
 
 		public ResourceBinaryViewCtrl()
 			=> this._control = new ByteViewer();

@@ -159,6 +159,7 @@ namespace Plugin.PEImageView
 			LOAD_TLB_AS_64BIT = 64
 		}
 
+#if NETFRAMEWORK
 		private static TypeLibConverter _TypeLibConverter = new TypeLibConverter();
 
 		public static ITypeLib LoadTypeLib(String filePath, TypeLibImporterFlags flags)
@@ -185,15 +186,6 @@ namespace Plugin.PEImageView
 			return result;
 		}
 
-		public static Boolean IsPrimaryInteropAssembly(Assembly assembly)
-		{
-			foreach(CustomAttributeData attribute in CustomAttributeData.GetCustomAttributes(assembly))
-				if(attribute.Constructor.DeclaringType == typeof(PrimaryInteropAssemblyAttribute))
-					return true;
-
-			return false;
-		}
-
 		public static Boolean GetPrimaryInteropAssembly(ITypeLib typeLib, out String assemblyName, out String assemblyCodeBase)
 		{
 			System.Runtime.InteropServices.ComTypes.TYPELIBATTR typeLibAttr = NativeMethods.GetTypeLibAttr(typeLib);
@@ -206,10 +198,20 @@ namespace Plugin.PEImageView
 				out assemblyName,
 				out assemblyCodeBase);
 		}
+#endif
 
-		/// <summary>Получить атрибуты COM+ библиотеки</summary>
-		/// <param name="typeLib">Указатель на COM+ библиотеку</param>
-		/// <returns>Заголовок COM+ библиотеки</returns>
+		public static Boolean IsPrimaryInteropAssembly(Assembly assembly)
+		{
+			foreach(CustomAttributeData attribute in CustomAttributeData.GetCustomAttributes(assembly))
+				if(attribute.Constructor.DeclaringType == typeof(PrimaryInteropAssemblyAttribute))
+					return true;
+
+			return false;
+		}
+
+		/// <summary>Get COM+ library attributes</summary>
+		/// <param name="typeLib">Pointer to COM+ library</param>
+		/// <returns>COM+ library header</returns>
 		public static System.Runtime.InteropServices.ComTypes.TYPELIBATTR GetTypeLibAttr(ITypeLib typeLib)
 		{
 			IntPtr ptrLibAttr = IntPtr.Zero;

@@ -20,7 +20,7 @@ namespace Plugin.PEImageView.Directory
 		public DocumentMetadata()
 			: base(PeHeaderType.DIRECTORY_COM_DECRIPTOR)
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 			gridSearch.ListView = lvHeaps;
 		}
 
@@ -30,8 +30,8 @@ namespace Plugin.PEImageView.Directory
 			this.ShowHeaders(info.ComDescriptor);
 		}
 
-		/// <summary>Отобразить все заголовки метаданных</summary>
-		/// <param name="directory">.NET директория с метаданными</param>
+		/// <summary>Display all metadata headers</summary>
+		/// <param name="directory">.NET directory with metadata</param>
 		private void ShowHeaders(ComPe directory)
 		{
 			var meta = directory.MetaData;
@@ -45,7 +45,7 @@ namespace Plugin.PEImageView.Directory
 				case Cor.StreamHeaderType.StreamTable:
 				case Cor.StreamHeaderType.StreamTableUnoptimized:
 					foreach(Cor.MetaTableType tableType in Enum.GetValues(typeof(Cor.MetaTableType)))
-						this.GetL2Node(node, tableType, meta.StreamTables);
+						this.CreateL2Node(node, tableType, meta.StreamTables);
 					break;
 				}
 			}
@@ -65,7 +65,7 @@ namespace Plugin.PEImageView.Directory
 			return result;
 		}
 
-		private TreeNode GetL2Node(TreeNode parent, Cor.MetaTableType tableType, StreamTables tables)
+		private void CreateL2Node(TreeNode parent, Cor.MetaTableType tableType, StreamTables tables)
 		{
 			TreeNode result = null;
 			foreach(TreeNode node in parent.Nodes)
@@ -76,22 +76,20 @@ namespace Plugin.PEImageView.Directory
 				}
 
 			if(result == null)
-			{//Такой узел не найден
+			{//No such node found
 				result = new TreeNode() { Tag = tableType, };
 				parent.Nodes.Add(result);
 			}
 
-			//Ставим текст
+			//Putting the text
 			UInt32 rowsCount = tables.GetRowsCount(tableType);
 			result.Text = $"{tableType} ({rowsCount:n0})";
 
-			//Разукрашиваем
+			//Painting the node
 			if(rowsCount == 0)
 				result.SetNull();
 			else if(result.IsNull())
 				result.SetDefaultStyle();
-
-			return result;
 		}
 
 		private void tvHierarchy_DragEnter(Object sender, DragEventArgs e)
@@ -117,7 +115,7 @@ namespace Plugin.PEImageView.Directory
 			{
 				base.Cursor = Cursors.WaitCursor;
 				if(header.HasValue)
-				{//Заголовок потока
+				{//Stream header
 					lvHeaps.SuspendLayout();
 					lvHeaps.Columns.Clear();
 					lvHeaps.Columns.AddRange(new ColumnHeader[] { new ColumnHeader() { Text = "String", }, new ColumnHeader() { Text = "Bin", }, });
@@ -153,7 +151,7 @@ namespace Plugin.PEImageView.Directory
 					lvHeaps.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 					lvHeaps.ResumeLayout(false);
 				} else if(tableType.HasValue)
-				{//Таблица с метаданными
+				{//Metadata table
 					if(base.Plugin.Settings.ShowBaseMetaTables)
 						lvHeaps.DataBind(meta.StreamTables[tableType.Value]);
 					else
@@ -168,7 +166,7 @@ namespace Plugin.PEImageView.Directory
 				base.Cursor = Cursors.Default;
 			}
 
-			//Сокрытие ссылок на другие таблицы
+			//Hiding references to other tables
 			splitDetails.Panel2Collapsed = true;
 			foreach(TabPage tab in tabPointers.TabPages)
 			{
@@ -177,7 +175,7 @@ namespace Plugin.PEImageView.Directory
 				tab.Dispose();
 			}
 
-			tabPointers.TabPages.Clear();//Удаление всех ранее созданных табов
+			tabPointers.TabPages.Clear();//Deleting all previously created tabs
 		}
 
 		private void lvHeaps_SelectedIndexChanged(Object sender, EventArgs e)
@@ -202,7 +200,7 @@ namespace Plugin.PEImageView.Directory
 						IEnumerable cellEnum = cell as IEnumerable;
 						Byte[] cellByteArray = cell as Byte[];
 						if(cellEnum?.GetType().IsBclType() == true)
-							continue;//Отсекаю System.String. TODO: Не реботает с Byte[] (cellByteArray)
+							continue;//Cutting off System.String. TODO: Doesn't work with Byte[] (cellByteArray)
 
 						if((cellPointer != null && cellPointer.TargetRow != null) || cellEnum != null || cellRow != null || cellByteArray!=null)
 						{
@@ -243,12 +241,11 @@ namespace Plugin.PEImageView.Directory
 		private ListViewItem AddHeapItem(Byte[] bytes, String str)
 		{
 			ListViewItem item = new ListViewItem();
-			String[] subItems = Array.ConvertAll<String, String>(new String[lvHeaps.Columns.Count], delegate(String a) { return String.Empty; });
+			String[] subItems = Array.ConvertAll<String, String>(new String[lvHeaps.Columns.Count], a => String.Empty);
 			item.SubItems.AddRange(subItems);
 			item.SubItems[0].Text = str;
 			item.SubItems[1].Text = BitConverter.ToString(bytes);
 			return item;
-			//lvHeaps.Items.Add(item);
 		}
 
 		private Control GetOrCreateTabControl(String columnText, Boolean isListView, Boolean isArrayListView, Boolean isByteView)

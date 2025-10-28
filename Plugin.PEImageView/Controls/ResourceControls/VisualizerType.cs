@@ -4,29 +4,29 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 {
 	internal enum VisualizerType
 	{
-		/// <summary>Нет визуализации</summary>
+		/// <summary>No visualization</summary>
 		None,
-		/// <summary>Визуализация в виде списка</summary>
+		/// <summary>List visualization</summary>
 		ListView,
-		/// <summary>Визуализация в браузере</summary>
+		/// <summary>Browser visualization</summary>
 		WebBrowser,
-		/// <summary>Визуализация в виде списка создаваемого через рефлексию</summary>
+		/// <summary>List visualization created via reflection</summary>
 		ListViewArray,
-		/// <summary>Визуализация в виде таблицы</summary>
+		/// <summary>Grid visualization</summary>
 		GridView,
-		/// <summary>Диалог</summary>
+		/// <summary>Dialog</summary>
 		Dialog,
-		/// <summary>Меню</summary>
+		/// <summary>Menu</summary>
 		Menu,
-		/// <summary>Тулбар</summary>
+		/// <summary>Toolbar</summary>
 		ToolBar,
-		/// <summary>Версия</summary>
+		/// <summary>Version</summary>
 		Version,
-		/// <summary>Массив байт</summary>
+		/// <summary>Byte array</summary>
 		BinView,
 		/// <summary>COM+</summary>
 		TypeLib,
-		/// <summary>Картинка</summary>
-		Bitmap,
+		/// <summary>Picture</summary> 
+		Bitmap
 	}
 }

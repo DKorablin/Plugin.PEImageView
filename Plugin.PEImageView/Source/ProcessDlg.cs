@@ -25,7 +25,7 @@ namespace Plugin.PEImageView.Source
 			processTimer.Stop();
 			Process[] processes = Process.GetProcesses();
 			for(Int32 loop = tvProcess.Nodes.Count - 1;loop >= 0;loop--)
-			{//Удаляю завершённые процессы
+			{//Deleting terminated processes
 				TreeNode node = tvProcess.Nodes[loop];
 				Boolean found = false;
 				foreach(Process process in processes)
@@ -43,7 +43,7 @@ namespace Plugin.PEImageView.Source
 				}
 			}
 			foreach(Process process in processes)
-			{//Добавляю новые процессы
+			{//Adding new processes
 				Boolean found = false;
 				foreach(TreeNode node in tvProcess.Nodes)
 					if(((Int32)node.Tag) == process.Id)
@@ -96,9 +96,7 @@ namespace Plugin.PEImageView.Source
 				else
 					e.Cancel = true;
 
-				if(module == null)
-					return;
-				else
+				if(module != null)
 				{
 					fileName = module.FileName;
 					if(e.Node.Checked)
@@ -113,7 +111,7 @@ namespace Plugin.PEImageView.Source
 		private static TreeNode CreateProcessNode(Process process)
 		{
 			Boolean error = ProcessDlg.TryGetProcessModuleName(process, out String processName);
-			TreeNode result = new TreeNode(String.Format("{0} ({1})", processName, process.Id)) { Tag = process.Id, ForeColor = error ? NodeExtender.ExceptionColor : Color.Empty, };
+			TreeNode result = new TreeNode($"{processName} ({process.Id})") { Tag = process.Id, ForeColor = error ? NodeExtender.ExceptionColor : Color.Empty, };
 			if(!error)
 				result.Nodes.Add(String.Empty);
 			return result;

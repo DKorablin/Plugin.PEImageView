@@ -31,7 +31,7 @@ namespace Plugin.PEImageView.Directory
 
 		public DocumentResources()
 			: base(PeHeaderType.DIRECTORY_RESOURCE)
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		protected override void ShowFile(AlphaOmega.Debug.PEFile info)
 		{
@@ -51,8 +51,7 @@ namespace Plugin.PEImageView.Directory
 			root.ImageIndex = root.SelectedImageIndex = (Int32)TreeImages.FolderClosed;
 
 			foreach(ResourceDirectory dir in resource)
-				this.CreateResourceNodeRecursive(root, dir);
-			//root.Nodes.Add(this.CreateResourceNodeRecursive(root, dir));
+				CreateResourceNodeRecursive(root, dir);
 
 			tvResource.Nodes.Add(root);
 			if(isDirty)
@@ -147,7 +146,7 @@ namespace Plugin.PEImageView.Directory
 			VisualizerType view = (VisualizerType)Enum.Parse(typeof(VisualizerType), (String)tsddlAlternateType.SelectedItem);
 			ResourceDirectory directory = (ResourceDirectory)tvResource.SelectedNode.Tag;
 
-			//Кнопка "Сохранить" только для бинарного вида
+			//The "Save" button is only for binary view.
 			tsbnSave.Visible = view == VisualizerType.BinView;
 			pnlResources.ShowControl(view, this.ExtractData(view, directory));
 			this.ShowDataSelectorControl();
@@ -155,10 +154,10 @@ namespace Plugin.PEImageView.Directory
 
 		private void ShowDataSelectorControl()
 		{
-			if(pnlResources.Control is IResourceSelectorCtrl)
+			if(pnlResources.Control is IResourceSelectorCtrl ctrl)
 			{
 				tsddlSelectableData.Items.Clear();
-				tsddlSelectableData.Items.AddRange(((IResourceSelectorCtrl)pnlResources.Control).SelectableData);
+				tsddlSelectableData.Items.AddRange(ctrl.SelectableData);
 				if(tsddlSelectableData.Items.Count > 0)
 					tsddlSelectableData.SelectedIndex = 0;
 				tsddlSelectableData.Visible = true;
@@ -172,7 +171,7 @@ namespace Plugin.PEImageView.Directory
 				tsResourceAction.Visible = false;
 		}
 
-		/// <summary>Отобразить элементы управления с данными</summary>
+		/// <summary>Display controls with data</summary>
 		private void ShowDataControls()
 		{
 			tsResourceAction.Visible = true;
@@ -182,8 +181,7 @@ namespace Plugin.PEImageView.Directory
 			ResourceDirectory directory = (ResourceDirectory)tvResource.SelectedNode.Tag;
 
 			Int32 selectedIndex = 0;
-			
-			String[] visualizers = this.GetCompatibleVisualizers(directory).Select(p => p.ToString()).ToArray();
+			String[] visualizers = GetCompatibleVisualizers(directory).Select(p => p.ToString()).ToArray();
 			if(tsddlAlternateType.Items.Cast<String>().SequenceEqual(visualizers))
 				selectedIndex = tsddlAlternateType.SelectedIndex;
 
@@ -192,7 +190,6 @@ namespace Plugin.PEImageView.Directory
 			tsddlAlternateType.Visible = tsddlAlternateType.Items.Count > 1;
 			tsddlAlternateType.SelectedIndex = selectedIndex;
 
-			//sepDataType.Visible = tsddlSelectableData.Visible && tsddbAlternateType.Visible;
 			foreach(ToolStripItem ctrl in tsResourceAction.Items)
 				if(ctrl.Visible)
 				{
@@ -202,10 +199,10 @@ namespace Plugin.PEImageView.Directory
 			tsResourceAction.Visible = false;
 		}
 
-		/// <summary>Создать иерархию директорий ресурсов</summary>
-		/// <param name="parent">Родительский узел дерева</param>
-		/// <param name="root">Корневая директория поддиректории которого надо заполнить</param>
-		private void CreateResourceNodeRecursive(TreeNode parent, ResourceDirectory root)
+		/// <summary>Create a resource directory hierarchy</summary>
+		/// <param name="parent">Parent tree node</param>
+		/// <param name="root">Root directory of the subdirectory to be populated</param>
+		private static void CreateResourceNodeRecursive(TreeNode parent, ResourceDirectory root)
 		{
 			TreeNode result = null;
 			foreach(TreeNode node in parent.Nodes)
@@ -223,7 +220,7 @@ namespace Plugin.PEImageView.Directory
 				else
 				{
 					Int32 nameAddress = (Int32)root.DirectoryEntry.NameAddress;
-					text = String.Format("{0} [{1}]", nameAddress, ResourceDirectory.GetLangName(nameAddress));
+					text = $"{nameAddress} [{ResourceDirectory.GetLangName(nameAddress)}]";
 					img = Utils.EnumParse<TreeImages>(root.Parent.Parent.DirectoryEntry.NameType.ToString(), TreeImages.Binary);
 				}
 
@@ -233,14 +230,14 @@ namespace Plugin.PEImageView.Directory
 			}
 			result.Tag = root;
 
-			Int32 count = 0;//Подсчёт общего кол-ва узлов
+			Int32 count = 0;//Counting the total number of nodes
 			foreach(ResourceDirectory dir in root)
 			{
-				this.CreateResourceNodeRecursive(result, dir);
+				CreateResourceNodeRecursive(result, dir);
 				count++;
 			}
 
-			//Удаление старых узлов, если такие остались
+			//Removing old nodes, if any remain
 			if(count != result.Nodes.Count)
 				for(Int32 loop = result.Nodes.Count - 1;loop >= 0;loop--)
 				{
@@ -256,17 +253,17 @@ namespace Plugin.PEImageView.Directory
 				}
 		}
 
-		private IEnumerable<VisualizerType> GetCompatibleVisualizers(ResourceDirectory directory)
+		private static IEnumerable<VisualizerType> GetCompatibleVisualizers(ResourceDirectory directory)
 		{
 			ResourceDirectory parentDirectory = directory.Parent.Parent;
 			if(parentDirectory.Name == "TYPELIB")
 				yield return VisualizerType.TypeLib;
 
-			foreach(VisualizerType type in this.GetCompatibleVisualizers(parentDirectory.DirectoryEntry.NameType))
+			foreach(VisualizerType type in GetCompatibleVisualizers(parentDirectory.DirectoryEntry.NameType))
 				yield return type;
 		}
 
-		private IEnumerable<VisualizerType> GetCompatibleVisualizers(WinNT.Resource.RESOURCE_DIRECTORY_TYPE type)
+		private static IEnumerable<VisualizerType> GetCompatibleVisualizers(WinNT.Resource.RESOURCE_DIRECTORY_TYPE type)
 		{
 			switch(type)
 			{
@@ -358,10 +355,10 @@ namespace Plugin.PEImageView.Directory
 				break;
 			case VisualizerType.WebBrowser:
 				if(nameType == WinNT.Resource.RESOURCE_DIRECTORY_TYPE.RT_HTML)
-					return String.Format("res://{0}/{1}", this.FilePath, directory.Parent.Name);
+					return $"res://{this.FilePath}/{directory.Parent.Name}";
 				break;
 			}
-			throw new NotImplementedException(String.Format("Visualizer: {0} can't render {1} directory", type, nameType));
+			throw new NotImplementedException($"Visualizer: {type} can't render {nameType} directory");
 		}
 	}
 }

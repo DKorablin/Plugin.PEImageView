@@ -2,13 +2,13 @@
 
 namespace Plugin.PEImageView.Controls.ResourceControls
 {
-	/// <summary>Интерфейс поддерживающий выбор индекса данных</summary>
+	/// <summary>Interface supporting data index selection</summary>
 	internal interface IResourceSelectorCtrl : IResourceCtrl
 	{
-		/// <summary>Данные, который должен выбрать пользователь перед отображением</summary>
+		/// <summary>Data the user must select before displaying</summary>
 		String[] SelectableData { get; }
-		/// <summary>Выбрать данные по индексу</summary>
-		/// <param name="index">Индекс данных</param>
+		/// <summary>Select data by index</summary>
+		/// <param name="index">Data index</param>
 		void SelectData(Int32 index);
 	}
 }

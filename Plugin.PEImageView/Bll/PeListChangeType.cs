@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Plugin.PEImageView.Bll
+﻿namespace Plugin.PEImageView.Bll
 {
 	/// <summary>File change type</summary>
 	public enum PeListChangeType

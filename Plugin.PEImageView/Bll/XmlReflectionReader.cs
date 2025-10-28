@@ -54,9 +54,7 @@ namespace Plugin.PEImageView.Bll
 
 				var navigator = doc.CreateNavigator();
 				var result = navigator.SelectSingleNode(String.Format("/doc/members/member[@name=\"{0}\"]/summary", memberName));
-				return result == null
-					? null
-					: result.InnerXml.Trim().Replace("  ", " ");
+				return result?.InnerXml.Trim().Replace("  ", " ");
 			});
 		}
 

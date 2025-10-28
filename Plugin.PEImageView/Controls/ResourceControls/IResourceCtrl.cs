@@ -3,16 +3,18 @@ using System.Windows.Forms;
 
 namespace Plugin.PEImageView.Controls.ResourceControls
 {
-	/// <summary>Отображения элемента ресурсов</summary>
+	/// <summary>Resource Element Displays</summary>
 	internal interface IResourceCtrl : IDisposable
 	{
-		/// <summary>Тип элемента управления</summary>
+		/// <summary>Control type</summary>
 		VisualizerType Type { get; }
-		/// <summary>Пользовательский элемент управления</summary>
+
+		/// <summary>Custom Control</summary>
 		Control Control { get; }
-		/// <summary>Применить данные к элементу упрвления</summary>
-		/// <param name="data">Данные</param>
-		/// <param name="index">Индекс из <see cref="T:SelectableData"/> или null</param>
+
+		/// <summary>Apply data to the control</summary>
+		/// <param name="data">Data</param>
+		/// <param name="index">Index from <see cref="T:SelectableData"/> or null</param>
 		void BindControl(Object data);
 	}
 }

@@ -17,7 +17,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 				if(this._data != null)
 				{
 					String[] result = new String[this._data.Tables.Count];
-					for(Int32 loop = 0;loop < result.Length;loop++)
+					for(Int32 loop = 0; loop < result.Length; loop++)
 						result[loop] = this._data.Tables[loop].ToString();
 					return result;
 				} else return null;
@@ -39,8 +39,8 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 		{
 			this._data = (DataSet)data;
 
-			if(this._gridView.DataSource != null && this._gridView.DataSource is IDisposable)
-				((IDisposable)this._gridView.DataSource).Dispose();
+			if(this._gridView.DataSource is IDisposable disposableDS)
+				disposableDS.Dispose();
 
 			this.SelectData(0);
 		}

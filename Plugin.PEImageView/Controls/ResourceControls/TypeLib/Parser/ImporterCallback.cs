@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -13,11 +14,9 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 		private static TraceSource _trace;
 		private readonly ComTypeAnalyzer _analyzer;
 
-		private static TraceSource Trace
-			=> ImporterCallback._trace ?? (ImporterCallback._trace = PluginWindows.CreateTraceSource<PluginWindows>(".TlbImp.Callback"));
+		private static TraceSource Trace => ImporterCallback._trace ?? (ImporterCallback._trace = PluginWindows.CreateTraceSource<PluginWindows>(".TlbImp.Callback"));
 
-		public ImporterCallback(ComTypeAnalyzer analyzer)
-			=> this._analyzer = analyzer;
+		public ImporterCallback(ComTypeAnalyzer analyzer) => this._analyzer = analyzer;
 
 		public void ReportEvent(ImporterEventKind eventKind, Int32 eventCode, String eventMsg)
 		{
@@ -32,14 +31,14 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 			}
 		}
 
-		public Assembly ResolveRef(Object TypeLib)
+		public Assembly ResolveRef(Object typeLib)
 		{
-			ITypeLib typeLib = (ITypeLib)TypeLib;
-			String typeLibName = Marshal.GetTypeLibName(typeLib);
+			ITypeLib typeLibInterface = (ITypeLib)typeLib;
+			String typeLibName = Marshal.GetTypeLibName(typeLibInterface);
 
 			ImporterCallback.Trace.TraceInformation(Resources.TypeLib_Msg_ResolvingRefArg1, typeLibName);
 
-			Assembly result = this._analyzer.ReferencedAssemblies[Marshal.GetTypeLibGuid(typeLib)];
+			Assembly result = this._analyzer.ReferencedAssemblies[Marshal.GetTypeLibGuid(typeLibInterface)];
 
 			if(result != null)
 			{//Looking in the referenced assemblies
@@ -51,13 +50,13 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 				return result;
 			}
 
-			if(NativeMethods.GetPrimaryInteropAssembly(typeLib, out String assemblyName, out String assemblyCodeBase))
+			if(NativeMethods.GetPrimaryInteropAssembly(typeLibInterface, out String assemblyName, out String assemblyCodeBase))
 			{//Looking on the file system
 				if(assemblyName != null)
 					assemblyName = AppDomain.CurrentDomain.ApplyPolicy(assemblyName);
 
 				try
-				{
+			{
 					result = Assembly.ReflectionOnlyLoad(assemblyName);
 				} catch(FileNotFoundException)
 				{
@@ -80,11 +79,10 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 				return result;
 			}
 
-			result = this._analyzer.ReferencedAssemblies2[Marshal.GetTypeLibGuid(typeLib)];
+			result = this._analyzer.ReferencedAssemblies2[Marshal.GetTypeLibGuid(typeLibInterface)];
 			if(result != null)
 			{//Looking in the referenced assemblies 2
 				ImporterCallback.Trace.TraceInformation(Resources.TypeLib_Msg_AssemblyResolvedArg1, typeLibName);
-
 				return result;
 			}
 
@@ -94,14 +92,14 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 			{
 				result = Assembly.ReflectionOnlyLoadFrom(assemblyFilePath);
 
-				System.Runtime.InteropServices.ComTypes.TYPELIBATTR typeLibAttr = NativeMethods.GetTypeLibAttr(typeLib);
+				System.Runtime.InteropServices.ComTypes.TYPELIBATTR typeLibAttr = NativeMethods.GetTypeLibAttr(typeLibInterface);
 
 				Version version = result.GetName().Version;
 				if(Marshal.GetTypeLibGuidForAssembly(result) == typeLibAttr.guid && ((version.Major == typeLibAttr.wMajorVerNum && version.Minor == typeLibAttr.wMinorVerNum) || (version.Major == 0 && version.Minor == 0 && typeLibAttr.wMajorVerNum == 1 && typeLibAttr.wMinorVerNum == 0)))
 				{
 					ImporterCallback.Trace.TraceInformation(Resources.TypeLib_Msg_AssemblyLoadedArg1, assemblyFilePath);
 
-					this._analyzer.AlreadyImportedLibraries[Marshal.GetTypeLibGuid(typeLib)] = result;
+					this._analyzer.AlreadyImportedLibraries[Marshal.GetTypeLibGuid(typeLibInterface)] = result;
 					return result;
 				}
 
@@ -120,13 +118,22 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 				ImporterCallback.Trace.TraceEvent(TraceEventType.Information, 10, exc.Message);
 			}
 
-			if(this._analyzer.ImportingAssemblies.Contains(Marshal.GetTypeLibGuid(typeLib)))
+			if(this._analyzer.ImportingAssemblies.Contains(Marshal.GetTypeLibGuid(typeLibInterface)))
 			{
 				ImporterCallback.Trace.TraceEvent(TraceEventType.Warning, 10, Resources.TypeLib_Wrn_CircularReferenceArg1, typeLibName);
 				return null;
 			}
 
-			return this._analyzer.ImportAssembly(typeLib, assemblyFilePath, null, null);
+			return this._analyzer.ImportAssembly(typeLibInterface, assemblyFilePath, null, null);
 		}
 	}
 }
+#else
+namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
+{
+	internal class ImporterCallback
+	{
+		public ImporterCallback(ComTypeAnalyzer analyzer) { }
+	}
+}
+#endif

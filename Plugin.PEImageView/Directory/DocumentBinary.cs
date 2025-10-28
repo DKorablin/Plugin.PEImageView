@@ -8,7 +8,8 @@ namespace Plugin.PEImageView.Directory
 {
 	public partial class DocumentBinary : DocumentBase
 	{
-		internal static DisplayMode[] DisplayModes = (DisplayMode[])Enum.GetValues(typeof(DisplayMode));
+		internal static readonly DisplayMode[] DisplayModes = (DisplayMode[])Enum.GetValues(typeof(DisplayMode));
+
 		private DocumentBinarySettings _settings;
 
 		public override DocumentBaseSettings Settings => this.SettingsI;
@@ -19,8 +20,8 @@ namespace Plugin.PEImageView.Directory
 		public DocumentBinary()
 			: base(PeHeaderType.IMAGE_SECTION)
 		{
-			InitializeComponent();
-			tsddlView.Items.AddRange(Array.ConvertAll(DocumentBinary.DisplayModes, delegate(DisplayMode mode) { return mode.ToString(); }));
+			this.InitializeComponent();
+			tsddlView.Items.AddRange(Array.ConvertAll(DocumentBinary.DisplayModes, mode => mode.ToString()));
 			tsddlView.SelectedIndex = 0;
 		}
 
@@ -37,12 +38,11 @@ namespace Plugin.PEImageView.Directory
 			String[] captions = new String[]
 			{
 				Constant.GetHeaderName(this.SettingsI.Header),
-				this.SettingsI.NodeName,//Наименование секции
+				this.SettingsI.NodeName,//Section name
 				Path.GetFileName(this.Settings.FilePath)
 			};
 
 			base.Window.Caption = String.Join(" - ", captions);
-			//base.SetCaption();
 		}
 
 		private ISectionData GetSectionData()

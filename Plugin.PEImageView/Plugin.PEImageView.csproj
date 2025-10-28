@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net48</TargetFrameworks>
+		<TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
 		<UseWindowsForms>true</UseWindowsForms>
 		<OutputType>Library</OutputType>
 		<RootNamespace>Plugin.PEImageView</RootNamespace>
@@ -8,6 +8,7 @@
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
 		<NoWarn>$(NoWarn);CA1416</NoWarn>
 	</PropertyGroup>
 
@@ -45,16 +46,15 @@
 			<_Parameter1>Windows</_Parameter1>
 		</AssemblyAttributes>
 	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<Reference Include="System.Design" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="SAL.Windows">
 			<ExcludeAssets>runtime</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="AlphaOmega.PEReader" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="System.Design" />
 	</ItemGroup>
 
 	<ItemGroup>

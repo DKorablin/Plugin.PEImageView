@@ -9,7 +9,7 @@ namespace Plugin.PEImageView.Directory
 	{
 		public DocumentRelocation()
 			: base(PeHeaderType.DIRECTORY_RELOCATION)
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		protected override void ShowFile(AlphaOmega.Debug.PEFile info)
 		{
@@ -19,7 +19,7 @@ namespace Plugin.PEImageView.Directory
 			foreach(var block in info.Relocations)
 			{
 				ListViewItem item = new ListViewItem() { Tag = block, };
-				String[] subItems = Array.ConvertAll<String, String>(new String[lvDirectory.Columns.Count], delegate(String a) { return String.Empty; });
+				String[] subItems = Array.ConvertAll<String, String>(new String[lvDirectory.Columns.Count], a => String.Empty);
 				item.SubItems.AddRange(subItems);
 
 				item.SubItems[colSize.Index].Text = base.Plugin.FormatValue(block.Block.SizeOfBlock);

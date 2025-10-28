@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using AlphaOmega.Debug;
 using AlphaOmega.Debug.NTDirectory;
 using AlphaOmega.Windows.Forms;
-using SAL.Windows;
 using ImportPe = AlphaOmega.Debug.NTDirectory.DelayImport;
 
 namespace Plugin.PEImageView.Directory
@@ -22,7 +21,7 @@ namespace Plugin.PEImageView.Directory
 		public DocumentDelayImport()
 			: base(PeHeaderType.DIRECTORY_DELAY_IMPORT)
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 			this.SmallImageList = new SystemImageList(SystemImageListSize.SmallIcons);
 			SystemImageListHelper.SetImageList(lvDll, this.SmallImageList, false);
 		}
@@ -66,9 +65,8 @@ namespace Plugin.PEImageView.Directory
 			WinNT.IMAGE_IMPORT_BY_NAME? import = this.SelectedImport;
 			if(import.HasValue && import.Value.IsByOrdinal)
 			{
-				DelayImportModule module = this.SelectedModule;
-				if(module == null)
-					throw new ApplicationException();
+				DelayImportModule module = this.SelectedModule
+					?? throw new InvalidOperationException();
 
 				String path = base.GetFilePath(module.ModuleName);
 				if(path != null)
@@ -92,10 +90,10 @@ namespace Plugin.PEImageView.Directory
 			lvImports.SuspendLayout();
 			lvImports.Items.AddRange(
 				Array.ConvertAll(module.ToArray(),
-				delegate(WinNT.IMAGE_IMPORT_BY_NAME import)
+				delegate (WinNT.IMAGE_IMPORT_BY_NAME import)
 				{
 					ListViewItem item = new ListViewItem() { Tag = import, };
-					String[] subItems = Array.ConvertAll<String, String>(new String[lvImports.Columns.Count], delegate(String a) { return String.Empty; });
+					String[] subItems = Array.ConvertAll<String, String>(new String[lvImports.Columns.Count], a => String.Empty);
 					item.SubItems.AddRange(subItems);
 					item.SubItems[colHint.Index].Text = import.Hint.ToString();
 					item.SubItems[colName.Index].Text = import.Name;
@@ -130,9 +128,9 @@ namespace Plugin.PEImageView.Directory
 						} else if(this.Plugin.Binaries.OpenFile(path))
 							isOpened = true;
 				}
-				if(isOpened)
-					if(this.Plugin.CreateWindow(typeof(PanelTOC).ToString(), true, null) == null)
-						this.Plugin.Trace.TraceEvent(TraceEventType.Warning, 1, "{0} not found!", typeof(PanelTOC).ToString());
+				if(isOpened
+					&& this.Plugin.CreateWindow(typeof(PanelTOC).ToString(), true, null) == null)
+					this.Plugin.Trace.TraceEvent(TraceEventType.Warning, 1, "{0} not found!", typeof(PanelTOC).ToString());
 			}
 		}
 	}

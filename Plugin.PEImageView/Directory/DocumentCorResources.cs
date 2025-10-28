@@ -10,7 +10,7 @@ namespace Plugin.PEImageView.Directory
 	{
 		public DocumentCorResources()
 			: base(PeHeaderType.DIRECTORY_COR_RESOURCE)
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		protected override void ShowFile(PEFile info)
 		{
@@ -42,14 +42,14 @@ namespace Plugin.PEImageView.Directory
 
 		private void tvResource_AfterSelect(Object sender, TreeViewEventArgs e)
 		{
-			ResourceTableReader row = e.Node.Tag as ResourceTableReader;
 			splitResource.Panel2Collapsed = true;
-			if(row == null)
+
+			if(!(e.Node.Tag is ResourceTableReader row))
 				lvResource.Clear();
 			else if(row.CanRead)
 				lvResource.DataBind(row);
 			else
-				throw new NotImplementedException("I dont know how to read streaming resources.");
+				throw new NotImplementedException("I don't know how to read streaming resources.");
 		}
 
 		private void lvResource_SelectedIndexChanged(Object sender, EventArgs e)

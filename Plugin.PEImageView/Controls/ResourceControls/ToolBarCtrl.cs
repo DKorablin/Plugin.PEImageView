@@ -12,7 +12,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 		private ToolStrip _resourceToolBar;
 
 		public ToolBarCtrl()
-			=> InitializeComponent();
+			=> this.InitializeComponent();
 
 		public void BindControl(IEnumerable<CommCtrl.TBBUTTON> buttons)
 		{

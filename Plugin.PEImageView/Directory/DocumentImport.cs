@@ -8,7 +8,6 @@ using AlphaOmega.Debug.NTDirectory;
 using AlphaOmega.Windows.Forms;
 using Plugin.PEImageView.Bll;
 using Plugin.PEImageView.Properties;
-using SAL.Windows;
 using ImportPe = AlphaOmega.Debug.NTDirectory.Import;
 
 namespace Plugin.PEImageView.Directory
@@ -24,7 +23,7 @@ namespace Plugin.PEImageView.Directory
 		public DocumentImport()
 			: base(PeHeaderType.DIRECTORY_IMPORT)
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 			this.SmallImageList = new SystemImageList(SystemImageListSize.SmallIcons);
 			SystemImageListHelper.SetImageList(lvDll, this.SmallImageList, false);
 		}
@@ -87,16 +86,14 @@ namespace Plugin.PEImageView.Directory
 			if(lvDll.SelectedItems.Count == 0)
 				return;
 
-			//String moduleName = lvDll.SelectedItems[0].Text;
-			ImportModule? lookupModule = this.SelectedModule;
-			if(lookupModule == null)
-				throw new ApplicationException();
+			ImportModule lookupModule = this.SelectedModule
+				?? throw new InvalidOperationException();
 
 			PEFile info = base.GetFile();
 
 			foreach(var module in info.Import)
 				//if(moduleName.Equals(module.ModuleName))
-				if(module.Header.Name == lookupModule.Value.Header.Name)
+				if(module.Header.Name == lookupModule.Header.Name)
 				{
 					lvImports.SuspendLayout();
 					List<ListViewItem> items = new List<ListViewItem>();
@@ -104,7 +101,7 @@ namespace Plugin.PEImageView.Directory
 					foreach(var row in module)
 					{
 						ListViewItem item = new ListViewItem() { Tag = row, };
-						String[] subItems = Array.ConvertAll<String, String>(new String[lvImports.Columns.Count], delegate(String a) { return String.Empty; });
+						String[] subItems = Array.ConvertAll<String, String>(new String[lvImports.Columns.Count], a => String.Empty);
 						item.SubItems.AddRange(subItems);
 						item.SubItems[colHint.Index].Text = row.Hint.ToString();
 						item.SubItems[colName.Index].Text = row.Name ?? Resources.NullString;
@@ -134,9 +131,9 @@ namespace Plugin.PEImageView.Directory
 					if(path != null && this.Plugin.Binaries.OpenFile(path))
 						isOpened = true;
 				}
-				if(isOpened)
-					if(this.Plugin.CreateWindow(typeof(PanelTOC).ToString(), true, null) == null)
-						this.Plugin.Trace.TraceEvent(TraceEventType.Warning, 1, "{0} not found!", typeof(PanelTOC).ToString());
+				if(isOpened
+					&& this.Plugin.CreateWindow(typeof(PanelTOC).ToString(), true, null) == null)
+					this.Plugin.Trace.TraceEvent(TraceEventType.Warning, 1, "{0} not found!", typeof(PanelTOC).ToString());
 			}
 		}
 		private void lvImports_DoubleClick(Object sender, EventArgs e)
@@ -144,11 +141,10 @@ namespace Plugin.PEImageView.Directory
 			WinNT.IMAGE_IMPORT_BY_NAME? import = this.SelectedImport;
 			if(import.HasValue && import.Value.IsByOrdinal)
 			{
-				ImportModule? module = this.SelectedModule;
-				if(!module.HasValue)
-					throw new ApplicationException();
+				ImportModule module = this.SelectedModule
+					?? throw new InvalidOperationException();
 
-				String path = base.GetFilePath(module.Value.ModuleName);
+				String path = base.GetFilePath(module.ModuleName);
 				if(path != null)
 				{
 					if(this.Plugin.CreateWindow<DocumentExport, DocumentBaseSettings>(
