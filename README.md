@@ -10,6 +10,15 @@ Portable Executable (PE) + CLI metadata inspection plugin. Originally created to
 - Provide an extensible plugin surface for different loading / analysis providers.
 - Assist in safe code cleanup decisions (unused members, assemblies relationships).
 
+## Installation
+To install the Portable Executable Viewer Plugin, follow these steps:
+1. Download the latest release from the [Releases](https://github.com/DKorablin/Plugin.PEImageView/releases)
+2. Extract the downloaded ZIP file to a desired location.
+3. Use the provided [Flatbed.Dialog (Lite)](https://dkorablin.github.io/Flatbed-Dialog-Lite) executable or download one of the supported host applications:
+	- [Flatbed.Dialog](https://dkorablin.github.io/Flatbed-Dialog)
+	- [Flatbed.MDI](https://dkorablin.github.io/Flatbed-MDI)
+	- [Flatbed.MDI (WPF)](https://dkorablin.github.io/Flatbed-MDI-Avalon)
+
 ## Supported Targets
 - .NET Framework 4.8 (full feature set, including runtime TypeLib import via TypeLibConverter).
 - .NET 8 (Windows) (TypeLib import disabled; falls back to `PlatformNotSupported` where not applicable).
@@ -31,12 +40,3 @@ Working directly with PE + metadata avoids these issues and enables lightweight 
 - COM TypeLib import is not available on .NET 8 builds; calls throw PlatformNotSupportedException.
 - Some advanced metadata (e.g. edit-and-continue deltas, profiler-specific streams) may not be parsed.
 - This is a static analysis aid; dynamic behaviors (reflection emit, runtime code generation) are out of scope.
-
-## Installation
-To install the Portable Executable Viewer Plugin, follow these steps:
-1. Download the latest release from the [Releases](https://github.com/DKorablin/Plugin.PEImageView/releases)
-2. Extract the downloaded ZIP file to a desired location.
-3. Use the provided [Flatbed.Dialog (Lite)](https://dkorablin.github.io/Flatbed-Dialog-Lite) executable or download one of the supported host applications:
-	- [Flatbed.Dialog](https://dkorablin.github.io/Flatbed-Dialog)
-	- [Flatbed.MDI](https://dkorablin.github.io/Flatbed-MDI)
-	- [Flatbed.MDI (WPF)](https://dkorablin.github.io/Flatbed-MDI-Avalon)

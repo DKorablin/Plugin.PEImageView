@@ -29,7 +29,7 @@ namespace Plugin.PEImageView.Bll
 		internal FileStorage(PluginWindows plugin)
 		{
 			this._plugin = plugin ?? throw new ArgumentNullException(nameof(plugin));
-			this._plugin.Settings.PropertyChanged += Settings_PropertyChanged;
+			this._plugin.Settings.PropertyChanged += this.Settings_PropertyChanged;
 		}
 
 		/// <summary>Get information about a PE file. If the file is not open, open it.</summary>
@@ -134,8 +134,8 @@ namespace Plugin.PEImageView.Bll
 			{
 				NotifyFilter = NotifyFilters.LastWrite,
 			};
-			watcher.Deleted += new FileSystemEventHandler(watcher_Changed);
-			watcher.Changed += new FileSystemEventHandler(watcher_Changed);
+			watcher.Deleted += new FileSystemEventHandler(this.watcher_Changed);
+			watcher.Changed += new FileSystemEventHandler(this.watcher_Changed);
 			watcher.EnableRaisingEvents = true;
 			this._binaryWatcher.Add(filePath, watcher);
 		}
@@ -296,7 +296,9 @@ namespace Plugin.PEImageView.Bll
 						try
 						{
 							using(FileStream s = info.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
-							{ }// File was modified and unlocked.
+							{
+								// File was modified and unlocked.
+							}
 
 							lock(this._binLock)//Closing old file
 							{
@@ -339,7 +341,7 @@ namespace Plugin.PEImageView.Bll
 				: Constant.BinaryFile;
 
 			return this._binaries.ContainsKey(indexName)
-				? GetBinaryUniqueName(checked(index + 1))
+				? this.GetBinaryUniqueName(checked(index + 1))
 				: indexName;
 		}
 	}

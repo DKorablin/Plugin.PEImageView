@@ -8,17 +8,23 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 {
+	/// <summary>Analyzer and importer for COM type libraries.</summary>
 	internal class ComTypeAnalyzer
 	{
 		private static readonly TypeLibConverter _typeLibConverter = new TypeLibConverter();
 
 		public Dictionary<Guid, Assembly> ReferencedAssemblies { get; } = new Dictionary<Guid, Assembly>();
+
 		public Dictionary<Guid, Assembly> ReferencedAssemblies2 { get; } = new Dictionary<Guid, Assembly>();
+
 		public Dictionary<Guid, Assembly> AlreadyImportedLibraries { get; } = new Dictionary<Guid, Assembly>();
+
 		public List<Guid> ImportingAssemblies { get; } = new List<Guid>();
 
 		public String InputFile { get; }
+
 		public TypeLibImporterFlags Flags { get; }
+
 		public String OutputDir { get; }
 
 		public ComTypeAnalyzer(String inputFile, TypeLibImporterFlags flags, String outputDir)
@@ -95,26 +101,33 @@ namespace System.Runtime.InteropServices
 
 namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 {
+	/// <summary>Analyzer and importer for COM type libraries.</summary>
 	internal class ComTypeAnalyzer
 	{
 		public Dictionary<Guid, Assembly> ReferencedAssemblies { get; } = new Dictionary<Guid, Assembly>();
+
 		public Dictionary<Guid, Assembly> ReferencedAssemblies2 { get; } = new Dictionary<Guid, Assembly>();
+
 		public Dictionary<Guid, Assembly> AlreadyImportedLibraries { get; } = new Dictionary<Guid, Assembly>();
+
 		public List<Guid> ImportingAssemblies { get; } = new List<Guid>();
 
-		public string InputFile { get; }
-		public TypeLibImporterFlags Flags { get; }
-		public string OutputDir { get; }
+		public String InputFile { get; }
 
-		public ComTypeAnalyzer(string inputFile, TypeLibImporterFlags flags, string outputDir)
+		public TypeLibImporterFlags Flags { get; }
+
+		public String OutputDir { get; }
+
+		public ComTypeAnalyzer(String inputFile, TypeLibImporterFlags flags, String outputDir)
 		{
-			InputFile = inputFile;
-			Flags = flags;
-			OutputDir = outputDir;
+			this.InputFile = inputFile;
+			this.Flags = flags;
+			this.OutputDir = outputDir;
 		}
 
 		public Assembly ImportAssembly()
 			=> throw new PlatformNotSupportedException("Runtime TypeLib import is only supported on .NET Framework.");
+
 		public Assembly ImportAssembly(ITypeLib typeLib, String assemblyFileName, String assemblyNamespace, Version version)
 			=> throw new PlatformNotSupportedException("Runtime TypeLib import is only supported on .NET Framework.");
 	}
