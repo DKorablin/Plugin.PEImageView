@@ -138,8 +138,8 @@
 			// 
 			// splitToc.Panel1
 			// 
-			this.splitToc.Panel1.Controls.Add(this.gridSearch);
 			this.splitToc.Panel1.Controls.Add(this.tvToc);
+			this.splitToc.Panel1.Controls.Add(this.gridSearch);
 			// 
 			// splitToc.Panel2
 			// 

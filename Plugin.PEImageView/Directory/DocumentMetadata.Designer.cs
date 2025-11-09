@@ -86,8 +86,8 @@
 			// 
 			// splitDetails.Panel1
 			// 
-			this.splitDetails.Panel1.Controls.Add(this.gridSearch);
 			this.splitDetails.Panel1.Controls.Add(this.lvHeaps);
+			this.splitDetails.Panel1.Controls.Add(this.gridSearch);
 			// 
 			// splitDetails.Panel2
 			// 

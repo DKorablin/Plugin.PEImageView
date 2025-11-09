@@ -51,8 +51,8 @@
 			// 
 			// tabGac
 			// 
-			this.tabGac.Controls.Add(this.gridSearch);
 			this.tabGac.Controls.Add(this.lvGac);
+			this.tabGac.Controls.Add(this.gridSearch);
 			this.tabGac.Location = new System.Drawing.Point(4, 22);
 			this.tabGac.Name = "tabGac";
 			this.tabGac.Padding = new System.Windows.Forms.Padding(3);
