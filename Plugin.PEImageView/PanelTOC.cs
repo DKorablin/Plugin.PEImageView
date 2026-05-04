@@ -150,13 +150,13 @@ namespace Plugin.PEImageView
 				PEFile pe2 = this.Plugin.Binaries.LoadFile(filePath);
 				ISectionData section = pe2.Sections.GetSection(nodeName);
 				if(section == null)
-					this.Plugin.Trace.TraceInformation("Viewer {0}. Section '{1}' not found", type, nodeName);
+					this.Plugin.Trace.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "Viewer {0}. Section '{1}' not found", type, nodeName);
 				else
 					this.OpenBinaryDocument(type, nodeName, filePath);
 				break;
 			default:
 				if(this.Plugin.CreateWindow(type, new DocumentBaseSettings() { FilePath = filePath, }) == null)
-					this.Plugin.Trace.TraceInformation("Viewer {0} not implemented", type);
+					this.Plugin.Trace.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "Viewer {0} not implemented", type);
 				break;
 			}
 		}

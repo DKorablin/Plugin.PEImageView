@@ -49,7 +49,7 @@ namespace Plugin.PEImageView.Directory
 			var info = this.GetFile();
 			if(info == null)
 			{
-				this.Plugin.Trace.TraceInformation("File {0} not found", this.FilePath);
+				this.Plugin.Trace.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "File {0} not found", this.FilePath);
 				this.Window.Close();
 			}
 		}
@@ -107,7 +107,7 @@ namespace Plugin.PEImageView.Directory
 				path = localPath;
 
 			if(path == null)
-				this.Plugin.Trace.TraceInformation("Module {1} not found at:{0}\tSystem: {2}{0}\tLocal: {3}", Environment.NewLine, fileName, sysPath, localPath);
+				this.Plugin.Trace.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "Module {1} not found at:{0}\tSystem: {2}{0}\tLocal: {3}", Environment.NewLine, fileName, sysPath, localPath);
 			return path;
 		}
 

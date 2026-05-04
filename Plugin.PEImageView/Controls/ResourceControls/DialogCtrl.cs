@@ -142,7 +142,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 						ctrl = DialogCtrl.CreateUpDownCtrl();
 						break;
 					default:
-						this._plugin.Trace.TraceInformation("RT_DIALOG Control class: '{0}' system class: '{1}' not implemented", control.ItemClass, control.ItemSystemClass);
+						this._plugin.Trace.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "RT_DIALOG Control class: '{0}' system class: '{1}' not implemented", control.ItemClass, control.ItemSystemClass);
 						break;
 					}
 					break;

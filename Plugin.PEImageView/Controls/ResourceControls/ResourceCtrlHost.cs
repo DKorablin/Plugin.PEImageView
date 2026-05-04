@@ -54,7 +54,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 			case VisualizerType.BinView:
 				return new ResourceBinaryViewCtrl();
 			case VisualizerType.TypeLib:
-				return new ResourceTypeLib();
+				return new ResourceTypeLib(this.Plugin);
 			default: throw new NotImplementedException();
 			}
 		}

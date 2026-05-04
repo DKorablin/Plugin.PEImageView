@@ -11,6 +11,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 	/// <summary>Analyzer and importer for COM type libraries.</summary>
 	internal class ComTypeAnalyzer
 	{
+		private readonly PluginWindows _plugin;
 		private static readonly TypeLibConverter _typeLibConverter = new TypeLibConverter();
 
 		public Dictionary<Guid, Assembly> ReferencedAssemblies { get; } = new Dictionary<Guid, Assembly>();
@@ -27,8 +28,9 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 
 		public String OutputDir { get; }
 
-		public ComTypeAnalyzer(String inputFile, TypeLibImporterFlags flags, String outputDir)
+		public ComTypeAnalyzer(PluginWindows plugin, String inputFile, TypeLibImporterFlags flags, String outputDir)
 		{
+			this._plugin = plugin ?? throw new ArgumentNullException(nameof(plugin));
 			this.Flags = flags;
 			this.InputFile = inputFile;
 			this.OutputDir = outputDir;
@@ -54,7 +56,7 @@ namespace Plugin.PEImageView.Controls.ResourceControls.TypeLib.Parser
 			System.Runtime.InteropServices.ComTypes.TYPELIBATTR typeLibAttr = NativeMethods.GetTypeLibAttr(typeLib);
 			TypeLibFlagCheck.ValidateMachineType(this.Flags, typeLibAttr.syskind);//TODO: Move to .ctor
 
-			ImporterCallback notifySink = new ImporterCallback(this);
+			ImporterCallback notifySink = new ImporterCallback(this, this._plugin);
 
 			AssemblyBuilder assemblyBuilder = ComTypeAnalyzer._typeLibConverter.ConvertTypeLibToAssembly(typeLib,
 				assemblyFileName,

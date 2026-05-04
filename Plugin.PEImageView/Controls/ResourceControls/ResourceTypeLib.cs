@@ -11,8 +11,8 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 
 		public Control Control => this._control;
 
-		public ResourceTypeLib()
-			=> this._control = new TypeLibCtrl();
+		public ResourceTypeLib(PluginWindows plugin)
+			=> this._control = new TypeLibCtrl(plugin);
 
 		public void BindControl(Object data)
 		{

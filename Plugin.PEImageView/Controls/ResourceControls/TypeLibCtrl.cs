@@ -8,14 +8,19 @@ namespace Plugin.PEImageView.Controls.ResourceControls
 {
 	internal partial class TypeLibCtrl : UserControl
 	{
-		public TypeLibCtrl()
-			=> this.InitializeComponent();
+		private readonly PluginWindows _plugin;
+
+		public TypeLibCtrl(PluginWindows plugin)
+		{
+			this._plugin = plugin ?? throw new ArgumentNullException(nameof(plugin));
+			this.InitializeComponent();
+		}
 
 		public void AttachTypeLib(String typeLibPath)
 		{
 #if NETFRAMEWORK
 			TypeLibImporterFlags flags = TypeLibImporterFlags.ReflectionOnlyLoading;
-			ComTypeAnalyzer analyzer = new ComTypeAnalyzer(typeLibPath, flags, Environment.CurrentDirectory);
+			ComTypeAnalyzer analyzer = new ComTypeAnalyzer(this._plugin, typeLibPath, flags, Environment.CurrentDirectory);
 
 			TreeNodeTypeLib node = new TreeNodeTypeLib(analyzer);
 			tvReflection.BindAssembly(node);
