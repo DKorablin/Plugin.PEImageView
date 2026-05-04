@@ -18,6 +18,7 @@ To install the Portable Executable Viewer Plugin, follow these steps:
 	- [Flatbed.Dialog](https://dkorablin.github.io/Flatbed-Dialog)
 	- [Flatbed.MDI](https://dkorablin.github.io/Flatbed-MDI)
 	- [Flatbed.MDI (WPF)](https://dkorablin.github.io/Flatbed-MDI-Avalon)
+	- [Flatbed.MDI (AvaloniaUI)](https://dkorablin.github.io/Flatbed-MDI-AvaloniaUI)
 
 ## Supported Targets
 - .NET Framework 4.8 (full feature set, including runtime TypeLib import via TypeLibConverter).

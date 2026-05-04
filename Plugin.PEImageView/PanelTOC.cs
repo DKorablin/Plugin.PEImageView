@@ -19,7 +19,7 @@ namespace Plugin.PEImageView
 		private const String Caption = "PE/CLI View";
 		private SystemImageList _smallImageList= new SystemImageList(SystemImageListSize.SmallIcons);
 
-		private PluginWindows Plugin => (PluginWindows)this.Window.Plugin;
+		private PluginWindows Plugin => (PluginWindows)this.Window.Plugin.Instance;
 
 		private IWindow Window => (IWindow)base.Parent;
 
@@ -69,7 +69,7 @@ namespace Plugin.PEImageView
 		private void ChangeTitle()
 			=> this.Window.Caption = tvToc.Nodes.Count > 0
 				? $"{PanelTOC.Caption} ({tvToc.Nodes.Count})"
-				: this.Window.Caption = PanelTOC.Caption;
+				: PanelTOC.Caption;
 
 		/// <summary>Search for a node in a tree by file path</summary>
 		/// <param name="filePath">File path</param>

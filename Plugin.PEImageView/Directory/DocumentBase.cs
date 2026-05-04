@@ -15,7 +15,7 @@ namespace Plugin.PEImageView.Directory
 		private readonly PeHeaderType _peType;
 		private DocumentBaseSettings _settings;
 
-		protected PluginWindows Plugin => (PluginWindows)this.Window.Plugin;
+		protected PluginWindows Plugin => (PluginWindows)this.Window.Plugin.Instance;
 		protected IWindow Window => (IWindow)base.Parent;
 
 		/// <summary>Path to the open file in the current document</summary>
